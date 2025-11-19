@@ -1,14 +1,22 @@
+caption: Supp Notes Stylesheet
+created: 20251115161726500
+modified: 20251201034104182
+tags: $:/tags/Stylesheet
+title: $:/supp-info/notes/styles/main
+type: text/vnd.tiddlywiki
+
 .supp-notes {
-  div.debug {background: red; color: white; font-weight: bold; font-size: 150%;}
-  background-color: #ffc;
+  background-color: <<color message-background>>;
+  color: <<color message-foreground>>;
   margin-top: 3em;
+  margin-bottom: -2em;
   padding: 0;
   .controls {
     display: inline-block;
     margin-left: 1em;
     svg {width: 1em; height: 1em; vertical-align: middle;}
   }
-  summary, .summary, .summary button.toggle {background-color: #996; color: white; padding: .5em; font-weight: bold;}
+  .summary, .summary  button.toggle {background-color: <<color message-foreground>>; color: <<color message-background>>; padding: .5em; font-weight: bold;}
   .note-row {
     display: flex; 
     flex-direction: row; 
