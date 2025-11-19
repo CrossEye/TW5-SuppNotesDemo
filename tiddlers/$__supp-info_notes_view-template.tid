@@ -1,5 +1,5 @@
 created: 20251107152410791
-modified: 20251107171311987
+modified: 20251107172153874
 tags: $:/tags/ViewTemplate
 title: $:/supp-info/notes/view-template
 type: text/vnd.tiddlywiki
@@ -8,9 +8,13 @@ type: text/vnd.tiddlywiki
 <div class="supp-notes">
 <$let count={{{ [{$:/supp-info/notes/content}jsonindexes<currentTiddler>last[]add[1]] }}}>
 
-<details>
+<details open>
   <summary><<count>> Note(s)</summary>
-   <div class="note-list">More content will go here</div>
+  <div class="note-list">
+    <$list filter={{{ [{$:/supp-info/notes/content}jsonindexes<currentTiddler>] }}} variable="index">
+      <div class="note"><$text text={{{ [{$:/supp-info/notes/content}jsonget<currentTiddler>,<index>] }}}/></div>
+    </$list>
+  </div>
 </details>
 
 </$let>
