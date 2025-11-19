@@ -1,18 +1,25 @@
 created: 20251107152410791
-modified: 20251109002552778
+modified: 20251111000109938
 tags: $:/tags/ViewTemplate
 title: $:/supp-info/notes/view-template
 type: text/vnd.tiddlywiki
 
 \procedure add-note()
-<$let count={{{ [{$:/supp-info/notes/content}jsonindexes<currentTiddler>last[]add[1]] }}}>
-<$action-setfield 
-  $tiddler="$:/supp-info/notes/content"
-  $file="text"
-  $value={{{ [{$:/supp-info/notes/content}jsonset<currentTiddler>,<count>,[Dummy text]format:json[2]] }}} 
-/>
-</$let>
+  <$let count={{{ [{$:/supp-info/notes/content}jsonindexes<currentTiddler>last[]add[1]] }}}>
+    <$action-setfield 
+      $tiddler="$:/supp-info/notes/content"
+      $value={{{ [{$:/supp-info/notes/content}jsonset<currentTiddler>,<count>,[Dummy text]format:json[2]] }}} 
+    />
+  </$let>
 \end add-note
+
+\procedure delete-note(index)
+  <$action-setfield 
+    $tiddler="$:/supp-info/notes/content"
+    $value={{{ [{$:/supp-info/notes/content}jsondelete<currentTiddler>,<index>format:json[2]] }}} 
+  />
+</$let>
+\end delete-note
 
 <% if [{$:/supp-info/notes/content}jsonget<currentTiddler>] %>
 <div class="supp-notes">
@@ -22,13 +29,13 @@ type: text/vnd.tiddlywiki
   <summary>
     <<count>> Note(s)  
     <span class="controls">
-      <$button actions=<<add-note>> ><span class="icon">{{$:/core/images/new-button}}</span></$button>
+      <$button actions="<<add-note>>" ><span class="icon">{{$:/core/images/new-button}}</span></$button>
     </span>
   </summary>
   <div class="note-list">
     <$list filter="[{$:/supp-info/notes/content}jsonindexes<currentTiddler>]" variable="index">
       <div class="note-row">
-        <div class="button"><span class="icon">{{$:/core/images/delete-button}}</span></div>
+        <div class="button"><$button actions=`<<delete-note $(index)$>>` ><span class="icon">{{$:/core/images/delete-button}}</span></$button></div>
         <div class="button"><span class="icon">{{$:/core/images/edit-button}}</span></div>
         <div class="note">
           <$wikify name="note" text={{{ [{$:/supp-info/notes/content}jsonget<currentTiddler>,<index>] }}} output="html"><<note>></$wikify>
@@ -58,7 +65,7 @@ type: text/vnd.tiddlywiki
     flex-direction: row; 
     align-items: center;
     padding: .5em;
-    div.button {
+    &+div.button {
       flex: 0 1 auto;
       width: 1.5em;
       svg {width: 1.5em; height: 1em; vertical-align: middle;}    }
