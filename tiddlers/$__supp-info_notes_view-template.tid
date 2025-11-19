@@ -1,5 +1,5 @@
 created: 20251107152410791
-modified: 20251107172153874
+modified: 20251107173101719
 tags: $:/tags/ViewTemplate
 title: $:/supp-info/notes/view-template
 type: text/vnd.tiddlywiki
@@ -11,9 +11,9 @@ type: text/vnd.tiddlywiki
 <details open>
   <summary><<count>> Note(s)</summary>
   <div class="note-list">
-    <$list filter={{{ [{$:/supp-info/notes/content}jsonindexes<currentTiddler>] }}} variable="index">
-      <div class="note"><$text text={{{ [{$:/supp-info/notes/content}jsonget<currentTiddler>,<index>] }}}/></div>
-    </$list>
+      <$list filter="[{$:/supp-info/notes/content}jsonindexes<currentTiddler>]" variable="index">
+        <div class="note"><$text text={{{ [{$:/supp-info/notes/content}jsonget<currentTiddler>,<index>] }}}/></div>
+      </$list>
   </div>
 </details>
 
@@ -22,10 +22,12 @@ type: text/vnd.tiddlywiki
 
 <style>
 .supp-notes {
+  div.debug {background: red; color: white; font-weight: bold; font-size: 150%;}
   background-color: #ffc;
   padding: 0;
   summary {background-color: #996; color: white; padding: .5em; font-weight: bold;}
   .note-list {padding: .5em;}
+  .note {border: 1px solid #ccc; padding: .25em; margin-top: .5em; &>:first-child {margin-top: 0;}}
 }
 </style
 <% endif %>
