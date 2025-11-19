@@ -1,18 +1,29 @@
 created: 20251107152410791
-modified: 20251107173101719
+modified: 20251107204927451
 tags: $:/tags/ViewTemplate
 title: $:/supp-info/notes/view-template
 type: text/vnd.tiddlywiki
+
+\procedure add-note()
+<$action-log clicked=<<now>> />
+\end add-note
 
 <% if [{$:/supp-info/notes/content}jsonget<currentTiddler>] %>
 <div class="supp-notes">
 <$let count={{{ [{$:/supp-info/notes/content}jsonindexes<currentTiddler>last[]add[1]] }}}>
 
 <details open>
-  <summary><<count>> Note(s)</summary>
+  <summary>
+    <<count>> Note(s)  
+    <span class="controls">
+      <$button actions=<<add-note>> ><span class="icon">{{$:/core/images/new-button}}</span></$button>
+    </span>
+  </summary>
   <div class="note-list">
       <$list filter="[{$:/supp-info/notes/content}jsonindexes<currentTiddler>]" variable="index">
-        <div class="note"><$text text={{{ [{$:/supp-info/notes/content}jsonget<currentTiddler>,<index>] }}}/></div>
+        <div class="note">
+          <$wikify name="note" text={{{ [{$:/supp-info/notes/content}jsonget<currentTiddler>,<index>] }}} output="html"><<note>></$wikify>
+        </div>
       </$list>
   </div>
 </details>
@@ -25,6 +36,11 @@ type: text/vnd.tiddlywiki
   div.debug {background: red; color: white; font-weight: bold; font-size: 150%;}
   background-color: #ffc;
   padding: 0;
+  .controls {
+    display: inline-block;
+    margin-left: 1em;
+    svg {width: 1em; height: 1em; vertical-align: middle;}
+  }
   summary {background-color: #996; color: white; padding: .5em; font-weight: bold;}
   .note-list {padding: .5em;}
   .note {border: 1px solid #ccc; padding: .25em; margin-top: .5em; &>:first-child {margin-top: 0;}}
