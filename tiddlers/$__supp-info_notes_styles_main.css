@@ -8,7 +8,7 @@
     margin-left: 1em;
     svg {width: 1em; height: 1em; vertical-align: middle;}
   }
-  summary {background-color: #996; color: white; padding: .5em; font-weight: bold;}
+  summary, .summary, .summary button.toggle {background-color: #996; color: white; padding: .5em; font-weight: bold;}
   .note-row {
     display: flex; 
     flex-direction: row; 

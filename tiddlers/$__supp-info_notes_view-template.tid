@@ -1,6 +1,6 @@
 caption: Supp Notes Template
 created: 20251107152410791
-modified: 20251115172707650
+modified: 20251117044242134
 query: [prefix[$:/supp-info]]
 tags: $:/tags/ViewTemplate
 title: $:/supp-info/notes/view-template
@@ -12,6 +12,8 @@ type: text/vnd.tiddlywiki
       $tiddler="$:/supp-info/notes/content"
       $value={{{ [{$:/supp-info/notes/content}jsonset<currentTiddler>,<count>,[Dummy text]format:json[2]] }}} 
     />
+    <$action-setfield $tiddler=`$:/temp/supp-info/notes/$(currentTiddler)$` $field="state" $value="show" />
+    <$action-setfield $tiddler=`$:/temp/supp-info/notes/$(currentTiddler)$/$(index)$` $field="mode" $value="edit" />
   </$let>
 \end add-note
 
@@ -46,13 +48,17 @@ type: text/vnd.tiddlywiki
 <div class="supp-notes">
 <$let count={{{ [{$:/supp-info/notes/content}jsonindexes<currentTiddler>last[]add[1]] }}}>
 
-<details open>
-  <summary>
-    <<count>> Note(s)  
-    <span class="controls">
-      <$button actions="<<add-note>>" ><span class="icon">{{$:/core/images/new-button}}</span></$button>
-    </span>
-  </summary>
+
+<div class="summary">
+  <$button class="tc-btn-invisible toggle" set=`$:/temp/supp-info/notes/$(currentTiddler)$!!state` setTo={{{ [<currentTiddler>addprefix[$:/temp/supp-info/notes/]get[state]toggle[show],[]] }}}>
+     <$let arrow={{{ [<currentTiddler>addprefix[$:/temp/supp-info/notes/]get[state]match[show]then[▽]else[▷]] }}}><<arrow>></$let>
+     <<count>> Note<% if [<count>!match[1]] %>s<% endif %>
+  </$button>
+  <span class="controls">
+    <$button actions="<<add-note>>" ><span class="icon">{{$:/core/images/new-button}}</span></$button>
+  </span>
+</div>
+<$reveal state=`$:/temp/supp-info/notes/$(currentTiddler)$!!state` type="match" text="show" tag=div>
   <div class="note-list">
     <$list filter="[{$:/supp-info/notes/content}jsonindexes<currentTiddler>]" variable="index">
       <div class="note-row">
@@ -76,7 +82,7 @@ type: text/vnd.tiddlywiki
       </div>
     </$list>
   </div>
-</details>
+</$reveal>
 
 </$let>
 </div>
