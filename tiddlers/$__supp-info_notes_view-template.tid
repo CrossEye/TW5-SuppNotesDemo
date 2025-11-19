@@ -1,5 +1,5 @@
 created: 20251107152410791
-modified: 20251111001809867
+modified: 20251112195543403
 tags: $:/tags/ViewTemplate
 title: $:/supp-info/notes/view-template
 type: text/vnd.tiddlywiki
@@ -18,8 +18,23 @@ type: text/vnd.tiddlywiki
     $tiddler="$:/supp-info/notes/content"
     $value={{{ [{$:/supp-info/notes/content}jsondelete<currentTiddler>,<index>format:json[2]] }}} 
   />
-</$let>
 \end delete-note
+
+\procedure edit-note(index)
+  <$action-setfield 
+    $tiddler=`$:/temp/supp-info/notes/$(currentTiddler)$/$(index)$`
+    $field=mode
+    $value=save
+  />
+\end edit-note
+
+\procedure save-note(index)
+  <$action-setfield 
+    $tiddler=`$:/temp/supp-info/notes/$(currentTiddler)$/$(index)$`
+    $field=mode
+    $value=edit
+  />
+\end save-note
 
 <% if [{$:/supp-info/notes/content}jsonget<currentTiddler>] %>
 <div class="supp-notes">
@@ -35,11 +50,19 @@ type: text/vnd.tiddlywiki
   <div class="note-list">
     <$list filter="[{$:/supp-info/notes/content}jsonindexes<currentTiddler>]" variable="index">
       <div class="note-row">
-        <$button actions=`<<delete-note $(index)$>>` ><span class="icon">{{$:/core/images/delete-button}}</span></$button>
-        <$button actions=`<<>>` ><span class="icon">{{$:/core/images/edit-button}}</span></$button>
-        <div class="note">
-          <$wikify name="note" text={{{ [{$:/supp-info/notes/content}jsonget<currentTiddler>,<index>] }}} output="html"><<note>></$wikify>
-        </div>
+        <$let toggle=`$:/temp/supp-info/notes/$(currentTiddler)$/$(index)$` mode={{{ [<toggle>get[mode]] }}} >
+          <$button actions=`<<delete-note $(index)$>>` ><span class="icon">{{$:/core/images/delete-button}}</span></$button>
+          <% if [<mode>match[edit]] %>
+            <$button actions=`<<edit-note $(index)$>>` ><span class="icon">{{$:/core/images/save-button}}</span></$button>
+          <% else %>
+            <$button actions=`<<save-note $(index)$>>` ><span class="icon">{{$:/core/images/edit-button}}</span></$button>
+          <% endif %>
+          <div class="note">
+            <$wikify name="note" text={{{ [{$:/supp-info/notes/content}jsonget<currentTiddler>,<index>] }}} output="html">
+              <<note>>
+            </$wikify>
+          </div>
+        </$let>
       </div>
     </$list>
   </div>
