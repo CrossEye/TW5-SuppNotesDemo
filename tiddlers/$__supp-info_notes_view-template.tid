@@ -1,5 +1,5 @@
 created: 20251107152410791
-modified: 20251107170212142
+modified: 20251107171311987
 tags: $:/tags/ViewTemplate
 title: $:/supp-info/notes/view-template
 type: text/vnd.tiddlywiki
@@ -8,17 +8,20 @@ type: text/vnd.tiddlywiki
 <div class="supp-notes">
 <$let count={{{ [{$:/supp-info/notes/content}jsonindexes<currentTiddler>last[]add[1]] }}}>
 
-
 <details>
   <summary><<count>> Note(s)</summary>
-   More content will go here
+   <div class="note-list">More content will go here</div>
 </details>
+
 </$let>
 </div>
 
 <style>
 .supp-notes {
   background-color: #ffc;
+  padding: 0;
+  summary {background-color: #996; color: white; padding: .5em; font-weight: bold;}
+  .note-list {padding: .5em;}
 }
 </style
 <% endif %>
