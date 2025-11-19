@@ -1,12 +1,12 @@
-caption: Supp
+caption: Supp Notes Sidebar
 created: 20251113195712539
-modified: 20251113200504449
+modified: 20251115164436518
 tags: $:/tags/SideBar
 title: $:/supp-info/core/sidebar/supp-info
 type: text/vnd.tiddlywiki
 
 ----------
-<<list-links "[prefix[$:/supp-info]] -[[$:/supp-info/core/sidebar/supp-info]]">>
+<<list-links "[prefix[$:/supp-info]]">>
 
 ----------
 <<list-links "HelloThere [[Quick Start]] [[Find Out More]]">>

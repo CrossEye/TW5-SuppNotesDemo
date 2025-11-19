@@ -1,0 +1,25 @@
+.supp-notes {
+  div.debug {background: red; color: white; font-weight: bold; font-size: 150%;}
+  background-color: #ffc;
+  margin-top: 3em;
+  padding: 0;
+  .controls {
+    display: inline-block;
+    margin-left: 1em;
+    svg {width: 1em; height: 1em; vertical-align: middle;}
+  }
+  summary {background-color: #996; color: white; padding: .5em; font-weight: bold;}
+  .note-row {
+    display: flex; 
+    flex-direction: row; 
+    gap: .75em;
+    align-items: center;
+    padding: .5em;
+    &button {
+      flex: 0 1 auto;
+      width: 2em;
+      svg {width: 1.5em; height: 1em; vertical-align: middle;}    }
+    div.note {flex: 1 0 auto;}
+  }
+  .note {border: 1px solid #ccc; padding: .25em .5em; margin-top: .5em; &>:first-child {margin-top: 0;}}
+}

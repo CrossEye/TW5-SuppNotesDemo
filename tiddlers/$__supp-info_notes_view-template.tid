@@ -1,5 +1,7 @@
+caption: Supp Notes Template
 created: 20251107152410791
-modified: 20251115161001828
+modified: 20251115162236544
+query: [prefix[$:/supp-info]]
 tags: $:/tags/ViewTemplate
 title: $:/supp-info/notes/view-template
 type: text/vnd.tiddlywiki
@@ -26,7 +28,7 @@ type: text/vnd.tiddlywiki
     temp=`$:/temp/supp-info/notes/$(currentTiddler)$/$(index)$` 
     text={{{ [<temp>get[text]] }}} 
     json={{{ [{$:/supp-info/notes/content}jsonset<currentTiddler>,<index>,<text>format:json[2]] }}}
->
+  >
     <$action-setfield $tiddler="$:/supp-info/notes/content" $field="text" $value=<<json>> />
   </$let>
 \end edit-note
@@ -81,31 +83,4 @@ type: text/vnd.tiddlywiki
 </$let>
 </div>
 
-<style>
-.supp-notes {
-  div.debug {background: red; color: white; font-weight: bold; font-size: 150%;}
-  background-color: #ffc;
-  margin-top: 3em;
-  padding: 0;
-  .controls {
-    display: inline-block;
-    margin-left: 1em;
-    svg {width: 1em; height: 1em; vertical-align: middle;}
-  }
-  summary {background-color: #996; color: white; padding: .5em; font-weight: bold;}
-  .note-row {
-    display: flex; 
-    flex-direction: row; 
-    gap: .75em;
-    align-items: center;
-    padding: .5em;
-    &button {
-      flex: 0 1 auto;
-      width: 2em;
-      svg {width: 1.5em; height: 1em; vertical-align: middle;}    }
-    div.note {flex: 1 0 auto;}
-  }
-  .note {border: 1px solid #ccc; padding: .25em .5em; margin-top: .5em; &>:first-child {margin-top: 0;}}
-}
-</style
 <% endif %>
