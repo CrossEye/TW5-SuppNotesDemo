@@ -1,6 +1,6 @@
 caption: Supp Notes Template
 created: 20251107152410791
-modified: 20251117211857042
+modified: 20251117224954668
 query: [prefix[$:/supp-info]]
 tags: $:/tags/ViewTemplate
 title: $:/supp-info/notes/view-template
@@ -9,7 +9,6 @@ type: text/vnd.tiddlywiki
 \procedure add-note()
   <$let count={{{ [{$:/supp-info/notes/content}jsonindexes<currentTiddler>last[]add[1]] }}} css-index={{{ [<count>else[0]add[1]] }}}>
     <% if [{$:/supp-info/notes/content}jsonindexes<currentTiddler>count[]match[0]] %>
-<$action-log message="AAA" count=<<count>> css-index=<<css-index>> />
       <$action-setfield 
         $tiddler="$:/supp-info/notes/content"
         $value={{{ [{$:/supp-info/notes/content}jsonset:array<currentTiddler>format:json[2]] }}} 
@@ -18,7 +17,7 @@ type: text/vnd.tiddlywiki
     <% endif %>
     <$action-setfield 
       $tiddler="$:/supp-info/notes/content"
-      $value={{{ [{$:/supp-info/notes/content}jsonset<currentTiddler>,<count>,[Dummy text]format:json[2]] }}} 
+      $value={{{ [{$:/supp-info/notes/content}jsonset<currentTiddler>,<count>,[]format:json[2]] }}} 
     />
     <$action-setfield $tiddler=`$:/temp/supp-info/notes/$(currentTiddler)$` $field="state" $value="show" />
     <$let key={{{ [<count>else[0]add[1]subtract[1]] }}}> <!-- TODO: fix this ridiculous hack! -->
