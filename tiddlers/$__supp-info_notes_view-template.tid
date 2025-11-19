@@ -1,5 +1,5 @@
 created: 20251107152410791
-modified: 20251112195543403
+modified: 20251115161001828
 tags: $:/tags/ViewTemplate
 title: $:/supp-info/notes/view-template
 type: text/vnd.tiddlywiki
@@ -21,18 +21,22 @@ type: text/vnd.tiddlywiki
 \end delete-note
 
 \procedure edit-note(index)
-  <$action-setfield 
-    $tiddler=`$:/temp/supp-info/notes/$(currentTiddler)$/$(index)$`
-    $field=mode
-    $value=save
-  />
+  <$action-setfield $tiddler=`$:/temp/supp-info/notes/$(currentTiddler)$/$(index)$` $field="mode" $value="save" />
+  <$let 
+    temp=`$:/temp/supp-info/notes/$(currentTiddler)$/$(index)$` 
+    text={{{ [<temp>get[text]] }}} 
+    json={{{ [{$:/supp-info/notes/content}jsonset<currentTiddler>,<index>,<text>format:json[2]] }}}
+>
+    <$action-setfield $tiddler="$:/supp-info/notes/content" $field="text" $value=<<json>> />
+  </$let>
 \end edit-note
 
 \procedure save-note(index)
+  <$action-setfield $tiddler=`$:/temp/supp-info/notes/$(currentTiddler)$/$(index)$` $field="mode" $value="edit" />
   <$action-setfield 
     $tiddler=`$:/temp/supp-info/notes/$(currentTiddler)$/$(index)$`
-    $field=mode
-    $value=edit
+    $field="text"
+    $value={{{ [{$:/supp-info/notes/content}jsonget<currentTiddler>,<index>] }}} 
   />
 \end save-note
 
@@ -58,9 +62,15 @@ type: text/vnd.tiddlywiki
             <$button actions=`<<save-note $(index)$>>` ><span class="icon">{{$:/core/images/edit-button}}</span></$button>
           <% endif %>
           <div class="note">
-            <$wikify name="note" text={{{ [{$:/supp-info/notes/content}jsonget<currentTiddler>,<index>] }}} output="html">
-              <<note>>
-            </$wikify>
+             <% if [<mode>match[edit]] %>
+              <$wikify name="note" text={{{ [{$:/supp-info/notes/content}jsonget<currentTiddler>,<index>] }}} output="html">
+                <<note>>
+              </$wikify>
+            <% else %>
+              <$wikify name="note" text={{{ [{$:/supp-info/notes/content}jsonget<currentTiddler>,<index>] }}} output="html">
+                <<note>>
+              </$wikify>
+            <% endif %>
           </div>
         </$let>
       </div>
