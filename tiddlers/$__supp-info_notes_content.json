@@ -1,7 +1,8 @@
 {
   "HelloThere": [
     "My very first note.\n\nLook ma, multiple lines!",
-    "Another note, just to prove I can."
+    "Another note, just to prove I can.",
+    "Dummy text"
   ],
   "Quick Start": [
     "And a note on another tiddler, with a [[link|Hard and Soft Links]] just for demo."

@@ -1,5 +1,5 @@
 created: 20251107152410791
-modified: 20251107221852106
+modified: 20251109002552778
 tags: $:/tags/ViewTemplate
 title: $:/supp-info/notes/view-template
 type: text/vnd.tiddlywiki
@@ -26,11 +26,15 @@ type: text/vnd.tiddlywiki
     </span>
   </summary>
   <div class="note-list">
-      <$list filter="[{$:/supp-info/notes/content}jsonindexes<currentTiddler>]" variable="index">
+    <$list filter="[{$:/supp-info/notes/content}jsonindexes<currentTiddler>]" variable="index">
+      <div class="note-row">
+        <div class="button"><span class="icon">{{$:/core/images/delete-button}}</span></div>
+        <div class="button"><span class="icon">{{$:/core/images/edit-button}}</span></div>
         <div class="note">
           <$wikify name="note" text={{{ [{$:/supp-info/notes/content}jsonget<currentTiddler>,<index>] }}} output="html"><<note>></$wikify>
         </div>
-      </$list>
+      </div>
+    </$list>
   </div>
 </details>
 
@@ -41,6 +45,7 @@ type: text/vnd.tiddlywiki
 .supp-notes {
   div.debug {background: red; color: white; font-weight: bold; font-size: 150%;}
   background-color: #ffc;
+  margin-top: 3em;
   padding: 0;
   .controls {
     display: inline-block;
@@ -48,7 +53,17 @@ type: text/vnd.tiddlywiki
     svg {width: 1em; height: 1em; vertical-align: middle;}
   }
   summary {background-color: #996; color: white; padding: .5em; font-weight: bold;}
-  .note-list {padding: .5em;}
+  .note-row {
+    display: flex; 
+    flex-direction: row; 
+    align-items: center;
+    padding: .5em;
+    div.button {
+      flex: 0 1 auto;
+      width: 1.5em;
+      svg {width: 1.5em; height: 1em; vertical-align: middle;}    }
+    div.note {flex: 1 0 auto;}
+  }
   .note {border: 1px solid #ccc; padding: .25em .5em; margin-top: .5em; &>:first-child {margin-top: 0;}}
 }
 </style
