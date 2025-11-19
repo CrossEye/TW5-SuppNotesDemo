@@ -1,5 +1,5 @@
 created: 20251107152410791
-modified: 20251107163850198
+modified: 20251107165640800
 tags: $:/tags/ViewTemplate
 title: $:/supp-info/notes/view-template
 type: text/vnd.tiddlywiki
@@ -7,5 +7,10 @@ type: text/vnd.tiddlywiki
 <% if [{$:/supp-info/notes/content}jsonget<currentTiddler>] %>
 
 !! Hey, it works
+
+<$let count={{{ [{$:/supp-info/notes/content}jsonindexes<currentTiddler>last[]add[1]] }}}>
+
+!!! <<count>> Notes
+</$let>
 
 <% endif %>
