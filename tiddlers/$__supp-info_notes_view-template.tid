@@ -1,16 +1,24 @@
 created: 20251107152410791
-modified: 20251107165640800
+modified: 20251107170212142
 tags: $:/tags/ViewTemplate
 title: $:/supp-info/notes/view-template
 type: text/vnd.tiddlywiki
 
 <% if [{$:/supp-info/notes/content}jsonget<currentTiddler>] %>
-
-!! Hey, it works
-
+<div class="supp-notes">
 <$let count={{{ [{$:/supp-info/notes/content}jsonindexes<currentTiddler>last[]add[1]] }}}>
 
-!!! <<count>> Notes
-</$let>
 
+<details>
+  <summary><<count>> Note(s)</summary>
+   More content will go here
+</details>
+</$let>
+</div>
+
+<style>
+.supp-notes {
+  background-color: #ffc;
+}
+</style
 <% endif %>
