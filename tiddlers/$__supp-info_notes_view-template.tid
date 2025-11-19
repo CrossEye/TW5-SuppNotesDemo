@@ -1,21 +1,31 @@
 caption: Supp Notes Template
 created: 20251107152410791
-modified: 20251117194827143
+modified: 20251117211857042
 query: [prefix[$:/supp-info]]
 tags: $:/tags/ViewTemplate
 title: $:/supp-info/notes/view-template
 type: text/vnd.tiddlywiki
 
 \procedure add-note()
-  <$let count={{{ [{$:/supp-info/notes/content}jsonindexes<currentTiddler>last[]add[1]] }}} css-index={{{ [<count>add[1]] }}}>
+  <$let count={{{ [{$:/supp-info/notes/content}jsonindexes<currentTiddler>last[]add[1]] }}} css-index={{{ [<count>else[0]add[1]] }}}>
+    <% if [{$:/supp-info/notes/content}jsonindexes<currentTiddler>count[]match[0]] %>
+<$action-log message="AAA" count=<<count>> css-index=<<css-index>> />
+      <$action-setfield 
+        $tiddler="$:/supp-info/notes/content"
+        $value={{{ [{$:/supp-info/notes/content}jsonset:array<currentTiddler>format:json[2]] }}} 
+      />
+    <% else %>
+    <% endif %>
     <$action-setfield 
       $tiddler="$:/supp-info/notes/content"
       $value={{{ [{$:/supp-info/notes/content}jsonset<currentTiddler>,<count>,[Dummy text]format:json[2]] }}} 
     />
     <$action-setfield $tiddler=`$:/temp/supp-info/notes/$(currentTiddler)$` $field="state" $value="show" />
-    <$action-setfield $tiddler=`$:/temp/supp-info/notes/$(currentTiddler)$/$(count)$` $field="mode" $value="edit" />
-    <!-- todo: find out why this doesn't work -->
-    <$action-sendmessage $message="tm-focus-selector" $param=`div[data-tiddler-title="$(currentTiddler)$"] div.note-row:nth-child($(css-index)$) textarea` />
+    <$let key={{{ [<count>else[0]add[1]subtract[1]] }}}> <!-- TODO: fix this ridiculous hack! -->
+      <$action-setfield $tiddler=`$:/temp/supp-info/notes/$(currentTiddler)$/$(key)$` $field="mode" $value="edit" />
+      <!-- TODO: find out why this doesn't work -->
+      <$action-sendmessage $message="tm-focus-selector" $param=`div[data-tiddler-title="$(currentTiddler)$"] div.note-row:nth-child($(css-index)$) textarea` />
+    </$let>
   </$let>
 \end add-note
 
@@ -46,9 +56,9 @@ type: text/vnd.tiddlywiki
   />
 \end save-note
 
-<% if [{$:/supp-info/notes/content}jsonget<currentTiddler>] %>
+<% if [<currentTiddler>is[tiddler]!is[system]] %>
 <div class="supp-notes">
-<$let count={{{ [{$:/supp-info/notes/content}jsonindexes<currentTiddler>last[]add[1]] }}}>
+<$let count={{{ [{$:/supp-info/notes/content}jsonindexes<currentTiddler>last[]add[1]] :else[[0]]  }}}>
 
 
 <div class="summary">
