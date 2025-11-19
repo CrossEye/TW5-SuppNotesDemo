@@ -1,5 +1,5 @@
 created: 20251107152410791
-modified: 20251111000109938
+modified: 20251111001809867
 tags: $:/tags/ViewTemplate
 title: $:/supp-info/notes/view-template
 type: text/vnd.tiddlywiki
@@ -35,8 +35,8 @@ type: text/vnd.tiddlywiki
   <div class="note-list">
     <$list filter="[{$:/supp-info/notes/content}jsonindexes<currentTiddler>]" variable="index">
       <div class="note-row">
-        <div class="button"><$button actions=`<<delete-note $(index)$>>` ><span class="icon">{{$:/core/images/delete-button}}</span></$button></div>
-        <div class="button"><span class="icon">{{$:/core/images/edit-button}}</span></div>
+        <$button actions=`<<delete-note $(index)$>>` ><span class="icon">{{$:/core/images/delete-button}}</span></$button>
+        <$button actions=`<<>>` ><span class="icon">{{$:/core/images/edit-button}}</span></$button>
         <div class="note">
           <$wikify name="note" text={{{ [{$:/supp-info/notes/content}jsonget<currentTiddler>,<index>] }}} output="html"><<note>></$wikify>
         </div>
@@ -63,11 +63,12 @@ type: text/vnd.tiddlywiki
   .note-row {
     display: flex; 
     flex-direction: row; 
+    gap: .75em;
     align-items: center;
     padding: .5em;
-    &+div.button {
+    &button {
       flex: 0 1 auto;
-      width: 1.5em;
+      width: 2em;
       svg {width: 1.5em; height: 1em; vertical-align: middle;}    }
     div.note {flex: 1 0 auto;}
   }
