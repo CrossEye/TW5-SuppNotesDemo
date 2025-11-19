@@ -1,0 +1,11 @@
+created: 20251107152410791
+modified: 20251107163850198
+tags: $:/tags/ViewTemplate
+title: $:/supp-info/notes/view-template
+type: text/vnd.tiddlywiki
+
+<% if [{$:/supp-info/notes/content}jsonget<currentTiddler>] %>
+
+!! Hey, it works
+
+<% endif %>
