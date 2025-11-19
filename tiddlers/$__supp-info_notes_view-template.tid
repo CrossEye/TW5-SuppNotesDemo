@@ -1,6 +1,6 @@
 caption: Supp Notes Template
 created: 20251107152410791
-modified: 20251115162236544
+modified: 20251115172707650
 query: [prefix[$:/supp-info]]
 tags: $:/tags/ViewTemplate
 title: $:/supp-info/notes/view-template
@@ -65,9 +65,7 @@ type: text/vnd.tiddlywiki
           <% endif %>
           <div class="note">
              <% if [<mode>match[edit]] %>
-              <$wikify name="note" text={{{ [{$:/supp-info/notes/content}jsonget<currentTiddler>,<index>] }}} output="html">
-                <<note>>
-              </$wikify>
+              <$edit-text tiddler=`$:/temp/supp-info/notes/$(currentTiddler)$/$(index)$` tag="textarea" field="text" />
             <% else %>
               <$wikify name="note" text={{{ [{$:/supp-info/notes/content}jsonget<currentTiddler>,<index>] }}} output="html">
                 <<note>>

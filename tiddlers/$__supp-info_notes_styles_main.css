@@ -18,7 +18,9 @@
     &button {
       flex: 0 1 auto;
       width: 2em;
-      svg {width: 1.5em; height: 1em; vertical-align: middle;}    }
+      svg {width: 1.5em; height: 1em; vertical-align: middle;}
+    }
+    textarea {width: 100%;}
     div.note {flex: 1 0 auto;}
   }
   .note {border: 1px solid #ccc; padding: .25em .5em; margin-top: .5em; &>:first-child {margin-top: 0;}}
