@@ -153,7 +153,7 @@ Changes
 
 We can download this and drag the resulting file to our test wiki:
 
-> [SuppNotes_Step1.json](SuppNotes_Step1.json)
+> [SuppNotes_Step1.json][st1]]
 
 
 ### Screenshot ###
@@ -308,7 +308,7 @@ Changes
 
 We can download this and drag the resulting file to oour test wiki:
 
-> [SuppNotes_Step2.json](SuppNotes_Step2.json)
+> [SuppNotes_Step2.json][st2]]
 
 We can simply accept the overlaying of the earlier code.
 
@@ -464,7 +464,7 @@ Changes
 
 We can download this and drag the resulting file to our test wiki:
 
-> [SuppNotes_Step3.json](SuppNotes_Step3.json)
+> [SuppNotes_Step3.json][st3]
 
 We can simply accept the overlaying of the earlier code.
 
@@ -629,7 +629,7 @@ Changes
 
 We can download this and drag the resulting file to our test wiki:
 
-> [SuppNotes_Step4.json](SuppNotes_Step4.json)
+> [SuppNotes_Step4.json][st4]
 
 You can simply accept the overlaying of the earlier code.
 
@@ -691,7 +691,7 @@ Changes
 
 We can download this and drag the resulting file to oour test wiki:
 
-> [SuppNotes_Step5.json](SuppNotes_Step5.json)
+> [SuppNotes_Step5.json][5]
 
 We can simply accept the overlaying of the earlier code.  ***But there is a new
 tiddler included**, and that one is a JS module, so we will need to save and
@@ -864,7 +864,7 @@ Changes
 
 Download this and drag the resulting file to your test wiki:
 
-> [SuppNotes_Step6.json](SuppNotes_Step6.json)
+> [SuppNotes_Step6.json][st6]
 
 We can simply accept the overlaying of the earlier code.  ***But if we are
 starting from a fresh copy of TiddlyWiki**, we will need to save and reload
@@ -986,7 +986,7 @@ Changes
 
 > Download this and drag the resulting file to your test wiki:
 
-[SuppNotes_Step7.json](SuppNotes_Step7.json)
+[SuppNotes_Step7.json][st7]
 
 We can simply accept the overlaying of the earlier code.  ***But if we are
 starting from a fresh copy of TiddlyWiki**, we will need to save and reload
@@ -1217,7 +1217,7 @@ Changes
 
 Download this and drag the resulting file to your test wiki:
 
-> [SuppNotes_Step8.json](SuppNotes_Step8.json)
+> [SuppNotes_Step8.json][st8]
 
 We can simply accept the overlaying of the earlier code.  ***But if we are
 starting from a fresh copy of TiddlyWiki**, we will need to save and reload
@@ -1315,7 +1315,7 @@ Changes
 
 Download this and drag the resulting file to your test wiki:
 
-[SuppNotes_Step9.json](SuppNotes_Step9.json)
+[SuppNotes_Step9.json][st9]
 
 We can simply accept the overlaying of the earlier code.  ***But if we are
 starting from a fresh copy of TiddlyWiki**, we will need to save and reload
@@ -1413,7 +1413,7 @@ Changes
 
 Download this and drag the resulting file to your test wiki:
 
-> [SuppNotes_Step10.json](SuppNotes_Step10.json)
+> [SuppNotes_Step10.json]([st10]
 
 We can simply accept the overlaying of the earlier code.   ***But there is a new
 tiddler included**, and that one is a JS module, so we will need to save and
@@ -1603,7 +1603,7 @@ Changes
 
 Download this and drag the resulting file to your test wiki:
 
-> [SuppNotes_Step11.json](SuppNotes_Step11.json)
+> [SuppNotes_Step11.json][st10]
 
 We can simply accept the overlaying of the earlier code.   ***But if we are
 starting from a fresh copy of TiddlyWiki**, we will need to save and reload
@@ -1699,6 +1699,17 @@ TODO: write this section!  :smile:
   [rw]:https://tiddlywiki.com/#RevealWidget
   [sav]: https://tiddlywiki.com/#Substituted%20Attribute%20Values
   [st]: https://tiddlywiki.com/dev/#Hook%3A%20th-saving-tiddler
+  [st1]: https://raw.githubusercontent.com/CrossEye/TW5-SuppNotesDemo/refs/heads/main/post/SuppNotes_Step1.json
+  [st2]: https://raw.githubusercontent.com/CrossEye/TW5-SuppNotesDemo/refs/heads/main/post/SuppNotes_Step2.json
+  [st3]: https://raw.githubusercontent.com/CrossEye/TW5-SuppNotesDemo/refs/heads/main/post/SuppNotes_Step3.json
+  [st4]: https://raw.githubusercontent.com/CrossEye/TW5-SuppNotesDemo/refs/heads/main/post/SuppNotes_Step4.json
+  [st5]: https://raw.githubusercontent.com/CrossEye/TW5-SuppNotesDemo/refs/heads/main/post/SuppNotes_Step5.json
+  [st6]: https://raw.githubusercontent.com/CrossEye/TW5-SuppNotesDemo/refs/heads/main/post/SuppNotes_Step6.json
+  [st7]: https://raw.githubusercontent.com/CrossEye/TW5-SuppNotesDemo/refs/heads/main/post/SuppNotes_Step7.json
+  [st8]: https://raw.githubusercontent.com/CrossEye/TW5-SuppNotesDemo/refs/heads/main/post/SuppNotes_Step8.json
+  [st9]: https://raw.githubusercontent.com/CrossEye/TW5-SuppNotesDemo/refs/heads/main/post/SuppNotes_Step9.json
+  [st10]: https://raw.githubusercontent.com/CrossEye/TW5-SuppNotesDemo/refs/heads/main/post/SuppNotes_Step10.json
+  [st11]: https://raw.githubusercontent.com/CrossEye/TW5-SuppNotesDemo/refs/heads/main/post/SuppNotes_Step11.json
   [su]: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/summary
   [tw]: https://tiddlywiki.com
   [us]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode
