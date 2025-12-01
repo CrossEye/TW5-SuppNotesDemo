@@ -153,7 +153,7 @@ Changes
 
 We can download this and drag the resulting file to our test wiki:
 
-> [SuppNotes_Step1.json][st1]]
+> [SuppNotes_Step1.json][st1]
 
 
 ### Screenshot ###
@@ -306,9 +306,9 @@ Changes
 
 ### Download ###
 
-We can download this and drag the resulting file to oour test wiki:
+We can download this and drag the resulting file to our test wiki:
 
-> [SuppNotes_Step2.json][st2]]
+> [SuppNotes_Step2.json][st2]
 
 We can simply accept the overlaying of the earlier code.
 
@@ -689,9 +689,9 @@ Changes
 
 ### Download ###
 
-We can download this and drag the resulting file to oour test wiki:
+We can download this and drag the resulting file to our test wiki:
 
-> [SuppNotes_Step5.json][5]
+> [SuppNotes_Step5.json][st5]
 
 We can simply accept the overlaying of the earlier code.  ***But there is a new
 tiddler included**, and that one is a JS module, so we will need to save and
@@ -862,7 +862,7 @@ Changes
 
 ### Download ###
 
-Download this and drag the resulting file to your test wiki:
+We can download this and drag the resulting file to our test wiki:
 
 > [SuppNotes_Step6.json][st6]
 
@@ -984,9 +984,9 @@ Changes
 
 ### Download ###
 
-> Download this and drag the resulting file to your test wiki:
+We can download this and drag the resulting file to our test wiki:
 
-[SuppNotes_Step7.json][st7]
+> [SuppNotes_Step7.json][st7]
 
 We can simply accept the overlaying of the earlier code.  ***But if we are
 starting from a fresh copy of TiddlyWiki**, we will need to save and reload
@@ -1215,7 +1215,7 @@ Changes
 
 ### Download ###
 
-Download this and drag the resulting file to your test wiki:
+We can download this and drag the resulting file to our test wiki:
 
 > [SuppNotes_Step8.json][st8]
 
@@ -1313,7 +1313,7 @@ Changes
 
 ### Download ###
 
-Download this and drag the resulting file to your test wiki:
+We can download this and drag the resulting file to our test wiki:
 
 [SuppNotes_Step9.json][st9]
 
@@ -1411,9 +1411,9 @@ Changes
 
 ### Download ###
 
-Download this and drag the resulting file to your test wiki:
+We can download this and drag the resulting file to our test wiki:
 
-> [SuppNotes_Step10.json]([st10]
+> [SuppNotes_Step10.json][st10]
 
 We can simply accept the overlaying of the earlier code.   ***But there is a new
 tiddler included**, and that one is a JS module, so we will need to save and
@@ -1601,9 +1601,9 @@ Changes
 
 ### Download ###
 
-Download this and drag the resulting file to your test wiki:
+We can download this and drag the resulting file to our test wiki:
 
-> [SuppNotes_Step11.json][st10]
+> [SuppNotes_Step11.json][st11]
 
 We can simply accept the overlaying of the earlier code.   ***But if we are
 starting from a fresh copy of TiddlyWiki**, we will need to save and reload
