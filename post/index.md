@@ -1,39 +1,21 @@
 Intro
 =====
 
-In [Notes on tiddlers stored in a data tiddler][dt], @TW_Tones describes a
-proof-of-concept system for storing metadata about certain tiddlers, not in
-their fields but in a single JSON tiddler.  The [discussion][dtd] about this
-ranged widely, but a very important point was that Tones was attempting to
-draw attention to the details of how this was built rather than to its core
-features:
+In [Notes on tiddlers stored in a data tiddler][dt], @TW_Tones describes a proof-of-concept system for storing metadata about certain tiddlers, not in their fields but in a single JSON tiddler.  The [discussion][dtd] about this ranged widely, but a very important point was that Tones was attempting to draw attention to the details of how this was built rather than to its core features:
 
 [quote="TW_Tones, post:20, topic:14429"]
 But the post is less about the solution and more about the details in the code.
 [/quote]
 
-I spent some of that discussion in critique of how this presentation was made.
-But if I'm going to do this, I need to be willing to put my money where my mouth
-is.  So here I go.  I'm going to try to document how I might build a similar
-system.  To be clear, I am not trying to precisely duplicate what @TW_Tones did,
-but build a version of the same core idea that works the way I would like.
+I spent some of that discussion in critique of how this presentation was made. But if I'm going to do this, I need to be willing to put my money where my mouth is.  So here I go.  I'm going to try to document how I might build a similar system.  To be clear, I am not trying to precisely duplicate what @TW_Tones did, but build a version of the same core idea that works the way I would like.
 
-But here too, the process of building and the techniques used are the most
-important part of this discussion.  The end product is... fine, but not very
-exciting.  I'm not going to do any comparisons of the two outcomes.  The only
-differences I know of are that mine handles multiple notes per tiddler, and that
-I have a solution of sorts for the *rename* conundrum he mentions:
+But here too, the process of building and the techniques used are the most important part of this discussion.  The end product is... fine, but not very exciting.  I'm not going to do any comparisons of the two outcomes.  The only differences I know of are that mine handles multiple notes per tiddler, and that I have a solution of sorts for the *rename* conundrum he mentions:
 
 [quote="TW_Tones, post:1, topic:14422"]
-Warning if the tiddler is renamed you will no longer see the notes for it. Do
-have an idea how to fix this?
+Warning if the tiddler is renamed you will no longer see the notes for it. Do have an idea how to fix this?
 [/quote]
 
-There was a bit of an answer to the unspoken question of, "well how would you do
-this better?"  But that's not quite it, either.  It's not a competition, but a
-demonstration of the style of documentation I prefer.  In this case, I'm
-documenting the series of steps I might take to build something like this.  I
-might later do a second pass that only explains the completed solution.
+There was a bit of an answer to the unspoken question of, "well how would you do this better?"  But that's not quite it, either.  It's not a competition, but a demonstration of the style of documentation I prefer.  In this case, I'm documenting the series of steps I might take to build something like this.  I might later do a second pass that only explains the completed solution.
 
 
 Contents
@@ -58,61 +40,48 @@ Contents
 
 
 
-What We're Building
-===================
+  What We're Building
+  ===================
 
-We store notes for all tiddlers inside a single JSON tiddler. 
+  We store notes for all tiddlers inside a single JSON tiddler. 
 
-We demo this on a copy of https://tiddlywiki.com.  A tiddler with
-three notes looks like this when collapsed:
+  We demo this on a copy of https://tiddlywiki.com.  A tiddler with three notes looks like this when collapsed:
 
-![Collapsed](OverviewShotCollapsed.png)
+  ![Collapsed](OverviewShotCollapsed.png)
 
-And like this when expanded:
+  And like this when expanded:
 
-![Expanded](OverviewShotExpanded.png)
+  ![Expanded](OverviewShotExpanded.png)
 
-Our content tiddler looks like this:
+  Our content tiddler looks like this:
 
-![Initial Content](InitialContentTiddler.png)
+  ![Initial Content](InitialContentTiddler.png)
 
-The point here is that this is a *single* JSON tiddler to store notes for *all*
-tiddlers.  There are other techniques for doing this sort of external metadata
-for tiddlers.  We won't discuss them here.
-
-We also won't discuss here *when* this is a useful technique.  (But if you want
-to see a long discussion about the usefulness and limitations of JSON tiddlers,
-[#14468][eu] is a recent one.)  The current discussion is all about *how* we
-might accomplish this.
+  The point here is that this is a *single* JSON tiddler to store notes for *all* tiddlers.  There are other techniques for doing this sort of external metadata for tiddlers.  We won't discuss them here.
+  
+  We also won't discuss here *when* this is a useful technique.  (But if you want to see a long discussion about the usefulness and limitations of JSON tiddlers, [#14468][eu] is a recent one.)  The current discussion is all about *how* we might accomplish this.
 
 
 Following along
 ===============
 
-The remainder of this post is a demonstration of the series of steps to build
-this.  It includes a few missteps and steps that are little more than
-scaffolding for the future.  
+The remainder of this post is a demonstration of the series of steps to build this.  It includes a few missteps and steps that are little more than scaffolding for the future.  
 
-To follow along, we start by downloading a copy of [tiddlywiki.com][tw] to our
-local machine and open it up.
+To follow along, we start by downloading a copy of [tiddlywiki.com][tw] to our local machine and open it up.
+
+Also, feel free to investigate the [GitHub repository][gr] with all the works discussed and this post.
 
 ### Downloading a step ###
 
-Each step is made by combining one or more of the git commits from the building
-process.  At each step we have a JSON file that we can download and test out.
-It will look like this:
+Each step is made by combining one or more of the git commits from the building process.  At each step we have a JSON file that we can download and test out. It will look like this:
 
 SuppNotes_Step1_.json (9.6 KB)
 
-We download such links, drag the resulting file onto our working wiki, and
-choose to `import`.  It's ok to override tiddlers we've downloaded earlier
-Twice we will need to save and reload in order to test the changes.  Once or
-twice we will need to delete a tiddler or two.  Such exceptions will be noted.
+We download such links, drag the resulting file onto our working wiki, and choose to `import`.  It's ok to override tiddlers we've downloaded earlier. Twice we will need to save and reload in order to test the changes.  Once or twice we will need to delete a tiddler or two.  Such exceptions will be noted.
 
 ### Viewing step components ###
 
-With each step we will also include links to the commits included in the change.
-It should look something like this.
+With each step we will also include links to the commits included in the change. It should look something like this.
 
 |                                                                         |                                                        |
 |:------------------------------------------------------------------------|:-------------------------------------------------------|
@@ -140,26 +109,12 @@ It should look something like this.
 
 ### Debugging ###
 
-It's generally difficult to debug wikitext.  Here, we often end up using
-`<$action-log message="Note about what's happening" more="info" goes="here"/>`.
-The results of those can be viewed from the developers' tools console
-(`CTRL/CMD-SHIFT-J`.)  But we also have a CSS `debug` class to be added to
-something we want made prominent -- it is simple a red coloring of the element.
-And half-way through we add a sidebar with our relevant material so we don't
-have to scroll all around the page to view and edit the various interesting
-tiddlers. Most of this debugging information is found in the Git commits in the
-middle of the steps.  If we follow along at the commit level, then we should try
-to keep the console open to see what's being logged.
+It's generally difficult to debug wikitext.  Here, we often end up using `<$action-log message="Note about what's happening" more="info" goes="here"/>`. The results of those can be viewed from the developers' tools console (`CTRL/CMD-SHIFT-J`.)  But we also have a CSS `debug` class to be added to something we want made prominent -- it is simple a red coloring of the element. And half-way through we add a sidebar with our relevant material so we don't have to scroll all around the page to view and edit the various interesting tiddlers. Most of this debugging information is found in the Git commits in the middle of the steps.  If we follow along at the commit level, then we should try to keep the console open to see what's being logged.
 
 
 ### Testing our additional changes ###
 
-If we want to make changes to the code supplied and test the changes we make, we
-can export the relevant tiddlers by entering `[prefix[$:/supp-info]]` on the
-`Filter` tab of the `$:/AdvancedSearch` page and choosing `export tiddler >
-JSON` from the `more` menu.  We just have to ensure that our tiddlers begin with
-that prefix. You can then drag the downloaded file atop a fresh copy of the
-[main page][tw].
+If we want to make changes to the code supplied and test the changes we make, we can export the relevant tiddlers by entering `[prefix[$:/supp-info]]` on the `Filter` tab of the `$:/AdvancedSearch` page and choosing `export tiddler > JSON` from the `more` menu.  We just have to ensure that our tiddlers begin with that prefix. You can then drag the downloaded file atop a fresh copy of the [main page][tw].
 
 
 
@@ -196,9 +151,7 @@ Explanation
 
 ### JSON Content ###
 
-We start with some JSON to hold our notes.  This JSON string represents an
-object, with tiddler titles for keys and arrays of strings for values, each of
-which represents a unique note.  It looks like this:
+We start with some JSON to hold our notes.  This JSON string represents an object, with tiddler titles for keys and arrays of strings for values, each of which represents a unique note.  It looks like this:
 
 ```json
 {
@@ -212,31 +165,21 @@ which represents a unique note.  It looks like this:
 }
 ```
 
-It is stored in a tiddler titled `$:/supp-info/notes/content` with `type` of
-`application/json`, and the tag `$:/tags/SupplementaryInfo`.  We can note
-(:smile:!) that it has entries only for the first two tiddlers in the default
-view of the [tiddlywiki.com][tw], which should be the basis for our test wikis.
+It is stored in a tiddler titled `$:/supp-info/notes/content` with `type` of `application/json`, and the tag `$:/tags/SupplementaryInfo`.  We can note (:smile:!) that it has entries only for the first two tiddlers in the default view of the [tiddlywiki.com][tw], which should be the basis for our test wikis.
 
 #### Prefix ####
 
-The prefix `$:/supp-info/notes/` is a little speculative.  The thought is that
-we might want other supplementary infomation about tiddlers, and they might all
-use similar paths and perhaps overlapping implementations.  As we go, we will
-see this prefix used for all tiddlers we write, except that two, which seem
-likely to be useful to other such supplemental ideas, do not include `"notes/"`.
+The prefix `$:/supp-info/notes/` is a little speculative.  The thought is that we might want other supplementary infomation about tiddlers, and they might all use similar paths and perhaps overlapping implementations.  As we go, we will see this prefix used for all tiddlers we write, except that two, which seem likely to be useful to other such supplemental ideas, do not include `"notes/"`.
 
 #### Tag ####
 
-The tag `$:/tags/SupplementaryInfo` is similarly speculative.  This would
-identify any any tiddlers holding external supplementary metadata about our
-tiddlers.  For now, it's only used here.
+The tag `$:/tags/SupplementaryInfo` is similarly speculative.  This would identify any any tiddlers holding external supplementary metadata about our tiddlers.  For now, it's only used here.
 
 
 
 ### View template ###
 
-We include a [ViewTemplate][vt] (title: `$:/supp-info/notes/view-template`,
-tags: `$:/tags/ViewTemplate`), which is run on every tiddler:
+We include a [ViewTemplate][vt] (title: `$:/supp-info/notes/view-template`, tags: `$:/tags/ViewTemplate`), which is run on every tiddler:
 
 ```html
 <% if [{$:/supp-info/notes/content}jsonget<currentTiddler>] %>
@@ -248,46 +191,24 @@ tags: `$:/tags/ViewTemplate`), which is run on every tiddler:
 <% endif %>
 ```
 
-The content is wrapped up in an `<% if ... %> ... <% endif %>` block, in which
-we check if the object represented by our JSON string includes this tiddler's
-title as a key.  If not, we do nothing.  But if it is included, we include the
-very professional-looking, "Hey, it works" plus a list of links to the *indices*
-of the elements in the array of notes for the current title.
+The content is wrapped up in an `<% if ... %> ... <% endif %>` block, in which we check if the object represented by our JSON string includes this tiddler's title as a key.  If not, we do nothing.  But if it is included, we include the very professional-looking, "Hey, it works" plus a list of links to the *indices* of the elements in the array of notes for the current title.
 
-The test we use is not the correct one for the final product, but it's often
-useful to work this way, making our templates more restrictive at first.  We
-only want to scroll among the first three tiddlers to check for multiple notes,
-a single note, and no notes.  It will be easy to change later.
+The test we use is not the correct one for the final product, but it's often useful to work this way, making our templates more restrictive at first.  We only want to scroll among the first three tiddlers to check for multiple notes, a single note, and no notes.  It will be easy to change later.
 
 
 #### JSON indices ####
 
-One thing which may catch some TiddlyWiki users unaware is how JSON indices
-work.  In most of TW, our indices look like `1, 2, 3, 4, ...`, but when you're
-working with JSON, which comes out of JavaScript, the indices look like `0, 1,
-2, 3, ...`.  There's a great deal of `[add[1]]`, `[subtract[1]]` involved in
-converting between JSON strings and TW indices.  I'm afraid the only real
-solution to this is *get used to it!*
+One thing which may catch some TiddlyWiki users unaware is how JSON indices work.  In most of TW, our indices look like `1, 2, 3, 4, ...`, but when you're working with JSON, which comes out of JavaScript, the indices look like `0, 1, 2, 3, ...`.  There's a great deal of `[add[1]]`, `[subtract[1]]` involved in converting between JSON strings and TW indices.  I'm afraid the only real solution to this is *get used to it!*
 
 
 #### jsonget Operator ###
 
-The [jsonget Operator][jg] is our first JSON operation.  We will see somewhat
-more complex usages later, but here, it just looks like
-`[{$:/supp-info/notes/content}jsonget<currentTiddler>]`, where the input is
-`{$:/supp-info/notes/content}`, our JSON string representing all notes.  Its
-only parameter is the title of the current tiddler.  With this wrapped in an `<%
-if %> <%endif %>`, we are simply testing whether the object represented by the
-JSON string includes they key of the tiddler under test.  Right now, this will only be true for the titles `"HelloThere"` and `"Quick Start"`.
+The [jsonget Operator][jg] is our first JSON operation.  We will see somewhat more complex usages later, but here, it just looks like `[{$:/supp-info/notes/content}jsonget<currentTiddler>]`, where the input is `{$:/supp-info/notes/content}`, our JSON string representing all notes.  Its only parameter is the title of the current tiddler.  With this wrapped in an `<% if %> <%endif %>`, we are simply testing whether the object represented by the JSON string includes they key of the tiddler under test.  Right now, this will only be true for the titles `"HelloThere"` and `"Quick Start"`.
 
 
 #### jsonindexes Operator ####
 
-The [jsonindex Operator][ji] is used in other places too, but for a JSON string,
-it fetches the string keys of an object (denoted in JSON with `{` - `}` pairs),
-or, as here, the numeric keys of an array (denoted in JSON with `[` - `]`
-pairs.)  So given the JSON string above, when `currentTiddler` is
-`"HelloThere"`, this will find the indices of this array:
+The [jsonindex Operator][ji] is used in other places too, but for a JSON string, it fetches the string keys of an object (denoted in JSON with `{` - `}` pairs), or, as here, the numeric keys of an array (denoted in JSON with `[` - `]` pairs.)  So given the JSON string above, when `currentTiddler` is `"HelloThere"`, this will find the indices of this array:
 
 ```json
   [
@@ -298,8 +219,7 @@ pairs.)  So given the JSON string above, when `currentTiddler` is
 
 And these are `0` and `1`.
 
-If we call it with `currentTiddler` set to `"Quick Start"`, we will get the
-indices of 
+If we call it with `currentTiddler` set to `"Quick Start"`, we will get the indices of 
 
 ```json
   [
@@ -307,14 +227,12 @@ indices of
   ]
 ```
 
-There is only one here; we will get back `0`, and if you open `Quick Start` the
-footer will look like this:
+There is only one here; we will get back `0`, and if you open `Quick Start` the footer will look like this:
 
 ![Screenshot 1b](Screenshot1b.png)
 
 
-No other tiddlers have their titles in the JSON, so none of them will show any
-footer at all.
+No other tiddlers have their titles in the JSON, so none of them will show any footer at all.
 
 
 
@@ -392,52 +310,27 @@ We add this wrapper
 </div>
 ```
 
-This is a convenient place to hang our styling.  Adding a unique class like this
-makes it much easier to write CSS that doesn't interfere with other parts of our
-wikis.  We add one more, `note-list` for similar reasons.
+This is a convenient place to hang our styling.  Adding a unique class like this makes it much easier to write CSS that doesn't interfere with other parts of our wikis.  We add one more, `note-list` for similar reasons.
 
 
 #### `count` variable ####
 
-We calculate a `count` variable using `jsonindexes`, `last[]`, and our first
-`add[1]` operation.  (Remember that we've been warned about these, because of a
-difference between TW indices and JSON ones.)  This tells us how many notes are
-associated with the current tiddler.
+We calculate a `count` variable using `jsonindexes`, `last[]`, and our first `add[1]` operation.  (Remember that we've been warned about these, because of a difference between TW indices and JSON ones.)  This tells us how many notes are associated with the current tiddler.
 
 
 #### Using a `details` element ####
 
-We use a [`details` element][ds] to handle hiding and showing content.  We know
-that in doing so, we're trading off features, compared to the
-[RevealWidget][rw]. The details element does not need any complex state
-handling, and is very simple to use.  But it doesn't maintain any state, so if
-we close and reopen our tiddler, it will revert to its default behavior: always
-open or always closed, depending upon how we've configured it.  For now, simple
-wins.  We may need to change this decision before the end, but it will not be
-difficult to do so.  (<small><ins>TODO</ins></small>)
+We use a [`details` element][ds] to handle hiding and showing content.  We know that in doing so, we're trading off features, compared to the [RevealWidget][rw]. The details element does not need any complex state handling, and is very simple to use.  But it doesn't maintain any state, so if we close and reopen our tiddler, it will revert to its default behavior: always open or always closed, depending upon how we've configured it.  For now, simple wins.  We may need to change this decision before the end, but it will not be difficult to do so.  (<small><ins>TODO</ins></small>)
 
-We include the count of notes in the [`<summary>`][su] so that it's always
-avaible, mostly to make it easier for us to decide if we even need to bother
-opening the details.  For a first pass we use "0 Note(s)`, "1 Note(s)", "2
-Note(s)", "3 Note(s)", etc., although perhaps later we'll come back and adjust
-to "0 Notes", "1 Note", "2 Notes", "3 Notes", etc., which just feels more
-polished.  (<small><ins>TODO</ins></small>)
+We include the count of notes in the [`<summary>`][su] so that it's always avaible, mostly to make it easier for us to decide if we even need to bother opening the details.  For a first pass we use "0 Note(s)`, "1 Note(s)", "2 Note(s)", "3 Note(s)", etc., although perhaps later we'll come back and adjust to "0 Notes", "1 Note", "2 Notes", "3 Notes", etc., which just feels more polished.  (<small><ins>TODO</ins></small>)
 
 ### Adding CSS ###
 
-Above we added classes to several elements in order to make it easy to apply
-stylesheets.  Now we add a `<style>` element and create styles.
+Above we added classes to several elements in order to make it easy to apply stylesheets.  Now we add a `<style>` element and create styles.
 
-In this document, we will not discuss how to use CSS.  There are many [wonderful
-CSS tutorials][cs] and [MDN][mc] maintains the definitive reference
-documentation.  If I personally  need any CSS how-tos, I depend on [CSS
-Tricks][ct], but there are many other good sites.  So here, we will only discuss
-*what* we do with CSS, not *how* we do it.
+In this document, we will not discuss how to use CSS.  There are many [wonderful CSS tutorials][cs] and [MDN][mc] maintains the definitive reference documentation.  If I personally  need any CSS how-tos, I depend on [CSS Tricks][ct], but there are many other good sites.  So here, we will only discuss *what* we do with CSS, not *how* we do it.
 
-But first, we should note one CSS feature that's now [become
-ubiquitous][cnu] across all major devices/browsers, [CSS Nesting][cn].  Instead
-of writing (in an entirely made-up example -- don't blame me if it hurts your
-eyes, ok?) this:
+But first, we should note one CSS feature that's now [become ubiquitous][cnu] across all major devices/browsers, [CSS Nesting][cn].  Instead of writing (in an entirely made-up example -- don't blame me if it hurts your eyes, ok?) this:
 
 ```css
 div.my-class {border: 1px solid red;}
@@ -461,16 +354,12 @@ div.my-class {
 }
 ```
 
-We take advantage of this here.  All our rules will be nested in `.supp-notes`,
-and parts will be inside `.note-list`.
+We take advantage of this here.  All our rules will be nested in `.supp-notes`, and parts will be inside `.note-list`.
 
 
 #### Colors ####
 
-The other styles here are meant to last, but the color scheme is meant mostly to
-make the work stand out while we're developing it.  It's easiest if we can see
-it at a glance.  At the end, we will probably want to find some useful palette
-entries for our colors, if possible.   (<small><ins>TODO</ins></small>)
+The other styles here are meant to last, but the color scheme is meant mostly to make the work stand out while we're developing it.  It's easiest if we can see it at a glance.  At the end, we will probably want to find some useful palette entries for our colors, if possible.   (<small><ins>TODO</ins></small>)
 
 
 
@@ -550,16 +439,12 @@ Our template now looks like this (less the CSS):
 
 #### `details` element ####
 
-Note that we've now made the `<details>` widget default to `open`.  This is a
-useful debugging technique, so that our changes are immediately visible.  We
-will revert this by the end. <small>(<ins>TODO</ins>)</small>
+Note that we've now made the `<details>` widget default to `open`.  This is a useful debugging technique, so that our changes are immediately visible.  We will revert this by the end. <small>(<ins>TODO</ins>)</small>
 
 
 #### new `<$button>` widget ####
 
-We create a [button][bw] to add a note to the current tiddler, and place it on
-the header row, so it's available whether or not the `details` are expanded.  It
-is connected to this new [procedure][pr]:
+We create a [button][bw] to add a note to the current tiddler, and place it on the header row, so it's available whether or not the `details` are expanded.  It is connected to this new [procedure][pr]:
 
 
 ```text
@@ -568,14 +453,9 @@ is connected to this new [procedure][pr]:
 \end add-note
 ```
 
-All this does for now is to log to the developer console (usually avaiable on
-desktop/laptop via `CTRL/CMD-SHIFT-J`).  If we open the console and click the
-button, we should see a new object logged to the console, with a `clicked`
-property set to the current time.  If we click it multiple times, we should see multiple logging events.
+All this does for now is to log to the developer console (usually avaiable on desktop/laptop via `CTRL/CMD-SHIFT-J`).  If we open the console and click the button, we should see a new object logged to the console, with a `clicked` property set to the current time.  If we click it multiple times, we should see multiple logging events.
 
-Doing dummy version of buttons like this lets us first test if the button
-displays properly and calls our action when it is is clicked, without focusing
-on the logic of what the button is supposed to do.
+Doing dummy version of buttons like this lets us first test if the button displays properly and calls our action when it is is clicked, without focusing on the logic of what the button is supposed to do.
 
 
 #### Displaying notes ####
@@ -591,13 +471,7 @@ time, we actually show them.
       </$list>
 ```
 
-We use a [`<$List>` widget][lw] to iterate the indices, and a new usage of
-[`jsonget`][jg] we haven't seen so far:
-`[{$:/supp-info/notes/content}jsonget<currentTiddler>,<index>]`.  Here we have
-two parameters, `<currentTiddler>` and `<index>`.  The current tiddler is the
-title we're working with, and the index is the variable from our iteration.  So,
-for instance, if the current tiddler is `"HelloThere"`, and the index is `1`,
-then, remembering that JSON array indices start from `0`, from our JSON of 
+We use a [`<$List>` widget][lw] to iterate the indices, and a new usage of [`jsonget`][jg] we haven't seen so far: `[{$:/supp-info/notes/content}jsonget<currentTiddler>,<index>]`.  Here we have two parameters, `<currentTiddler>` and `<index>`.  The current tiddler is the title we're working with, and the index is the variable from our iteration.  So, for instance, if the current tiddler is `"HelloThere"`, and the index is `1`, then, remembering that JSON array indices start from `0`, from our JSON of 
 
 ```json
 {
@@ -611,25 +485,15 @@ then, remembering that JSON array indices start from `0`, from our JSON of
 }
 ```
 
-we can see that this should result in the string, `"Another note, just to prove
-I can."`
+we can see that this should result in the string, `"Another note, just to prove I can."`
 
 
 #### `wikify Widget` ####
 
-To display this note, we use the [`WikifyWidget`][ww], which takes the text we
-just found, and, treating it as wikitext, converts it into a format useful for
-displaying, storing the results in the variable `note`.  We use the `output`
-parameter to choose the format `"html"`. Then in the content of the widget, we
-include the reference `<<note>>` to put that out to the user.  That this is now
-treating the content as wikitext explains the reason we've updated `Quick
-Start/0`: we want to test some actual wikitext and not just plain test.
-Theoretically, seeing that blank lines are respected would be enough, but
-something like links feels like a more substantial test.
+To display this note, we use the [`WikifyWidget`][ww], which takes the text we just found, and, treating it as wikitext, converts it into a format useful for displaying, storing the results in the variable `note`.  We use the `output` parameter to choose the format `"html"`. Then in the content of the widget, we include the reference `<<note>>` to put that out to the user.  That this is now treating the content as wikitext explains the reason we've updated `Quick Start/0`: we want to test some actual wikitext and not just plain test. Theoretically, seeing that blank lines are respected would be enough, but something like links feels like a more substantial test.
 
 
-The results of this are wrapped in a `<div class="note">` to have someplace to
-hang our styling.  Note the blue link in the following:
+The results of this are wrapped in a `<div class="note">` to have someplace to hang our styling.  Note the blue link in the following:
 
 ![Screenshot 3b](Screenshot3b.png)
 
@@ -689,15 +553,9 @@ The only change here is to make our Add Note button function properly.
 \end add-note
 ```
 
-The very important thing we need to notice here is that we first create a new
-JSON string from our old one, using the [`jsonset Operator`][js], then we update
-the JSON string in our content tiddler by overwriting the whole thing with this
-new string.  There is no shortcut to change just the relevant part of JSON
-strings.  The [discussion][dtd] mentioned in our opening section explains this
-in much more detail.
+The very important thing we need to notice here is that we first create a new JSON string from our old one, using the [`jsonset Operator`][js], then we update the JSON string in our content tiddler by overwriting the whole thing with this new string.  There is no shortcut to change just the relevant part of JSON strings.  The [discussion][dtd] mentioned in our opening section explains this in much more detail.
 
-We fill the new tiddler's `text` field with "Dummy text", just so that we can
-see this working.  Editing will come pretty soon.
+We fill the new tiddler's `text` field with "Dummy text", just so that we can see this working.  Editing will come pretty soon.
 
 
 
@@ -713,9 +571,7 @@ We can download this and drag the resulting file to our test wiki:
 
 > [SuppNotes_Step5.json][st5]
 
-We can simply accept the overlaying of the earlier code.  ***<ins>But there is a
-new tiddler included</ins>**, and that one is a JS module, so we will need to
-save and reload our sample wiki to see these changes.*
+We can simply accept the overlaying of the earlier code.  ***<ins>But there is a new tiddler included</ins>**, and that one is a JS module, so we will need to save and reload our sample wiki to see these changes.*
 
 
 ### Screenshots ###
@@ -784,34 +640,14 @@ const deepDelete = ([first, ...rest] = []) => (obj,
 
 #### Analysis ####
 
-This has the public exported function `jsondelete`, which is a Tiddlywiki
-wrapper around the function `deepDelete`.  This function is written in a very
-different style than most TW code, using nested conditional operations and
-expressions instead of statements.  The basic idea is that we accept an array of
-indices and return a function which takes an object, traverses that object along
-the path of node names supplied, and when that path is exhausted, remove the
-current element.
+This has the public exported function `jsondelete`, which is a Tiddlywiki wrapper around the function `deepDelete`.  This function is written in a very different style than most TW code, using nested conditional operations and expressions instead of statements.  The basic idea is that we accept an array of indices and return a function which takes an object, traverses that object along the path of node names supplied, and when that path is exhausted, remove the current element.
 
-This is a recursive function.  The base case is when the path is empty, and we
-return the object intact.  Then we fork on whether we have an array or something
-else.  In either case, we fork on whether there is any remaining path beyond the
-current node.
+This is a recursive function.  The base case is when the path is empty, and we return the object intact.  Then we fork on whether we have an array or something else.  In either case, we fork on whether there is any remaining path beyond the current node.
 
-  * If we're in an array and have no remaining path, we return an array with all
-    the elements before and all the elements after the current index, but *not*
-    the element at the index.
-  * If we're in an array and the path goes deeper, we return all the elements
-    before the current index, make a recursive call back to this function with
-    the remaining path and the element at this index, include the results and
-    then include the elements after that index.
-  * If we're in an object and have no remaining path, we decompose our object
-    into a list of key-value pairs, filter out those with keys matching our
-    current index, then reconsistuting the remaining back into an object.
-  * If we're in an object and the path goes deeper, we decompose our object into
-    a list of key-value pairs, converting those with keys matching our current
-    index by recursively call our function with the remaining path and the
-    value, leaving the others intact, then reconsistuting the results back into
-    an object.
+  * If we're in an array and have no remaining path, we return an array with all the elements before and all the elements after the current index, but *not* the element at the index.
+  * If we're in an array and the path goes deeper, we return all the elements before the current index, make a recursive call back to this function with the remaining path and the element at this index, include the results and then include the elements after that index.
+  * If we're in an object and have no remaining path, we decompose our object into a list of key-value pairs, filter out those with keys matching our current index, then reconsistuting the remaining back into an object.
+  * If we're in an object and the path goes deeper, we decompose our object into a list of key-value pairs, converting those with keys matching our current index by recursively call our function with the remaining path and the value, leaving the others intact, then reconsistuting the results back into an object.
 
 (This breakdown makes it clear that we're missing the case where the element is neither an array nor an object.  While we won't fix it now, that should be taken up soon. (<small><ins>TODO</ins></small>))
 
@@ -835,14 +671,11 @@ We start with a new procedure which calls our new operator:
 \end delete-note
 ```
 
-We call the `jsondelete` operator on our JSON content using the current tiddler
-and the index supplied, format the result in a more readable format
-(`format:json[2]`), and then override that JSON content with this new value.
+We call the `jsondelete` operator on our JSON content using the current tiddler and the index supplied, format the result in a more readable format (`format:json[2]`), and then override that JSON content with this new value.
 
 #### Updated note handling ####
 
-Here we add two new buttons next to the note, one to call the `delete` operation
-we've added, and one to trigger edit mode.
+Here we add two new buttons next to the note, one to call the `delete` operation we've added, and one to trigger edit mode.
 
 ```html
       <div class="note-row">
@@ -854,14 +687,13 @@ we've added, and one to trigger edit mode.
       </div>
 ```
 
-We hook a real activity to the `delete` button, but for this iteration leave the
-edit one as a dummy.  Most of this is simple, but we should pay attention to *how* our `delete` button operation is configured.  There are different ways to do this.  Older code usually nested action widgets inside the `$button` contents.  That still works, but most modern code uses the `actions` string attribute as above, allowing us to delay the calling of the widget until the button is pressed.  Only then is the string interpreted.  But, we want to pass our index parameter along so that it always included.  For this we use [Substituted Attribute Values][sav]:
+We hook a real activity to the `delete` button, but for this iteration leave the edit one as a dummy.  Most of this is simple, but we should pay attention to *how* our `delete` button operation is configured.  There are different ways to do this.  Older code usually nested action widgets inside the `$button` contents.  That still works, but most modern code uses the `actions` string attribute as above, allowing us to delay the calling of the widget until the button is pressed.  Only then is the string interpreted.  But, we want to pass our index parameter along so that it always included.  For this we use [Substituted Attribute Values][sav]:
 
 ```html
  <$button actions=`<<delete-note $(index)$>>` >
  ```
 
- These allow us to include a variable's value (`index`) directly in a string.  A similar form allows us to use the output of a *filter expression* instead.
+These allow us to include a variable's value (`index`) directly in a string.  A similar form allows us to use the output of a *filter expression* instead.
 
 In our iteration on the second note for our tiddler (remember, that means index `1`), the above would be equivalent to
 
@@ -886,9 +718,7 @@ We can download this and drag the resulting file to our test wiki:
 
 > [SuppNotes_Step6.json][st6]
 
-We can simply accept the overlaying of the earlier code.  ***But if we are
-starting from a fresh copy of TiddlyWiki**, we will need to save and reload
-our sample wiki to see everything function as expected.*
+We can simply accept the overlaying of the earlier code.  ***But if we are starting from a fresh copy of TiddlyWiki**, we will need to save and reload our sample wiki to see everything function as expected.*
 
 
 ### Screenshots ###
@@ -915,13 +745,9 @@ our sample wiki to see everything function as expected.*
 Explanation
 -----------
 
-"Dummy text" isn't going to carry use far.  We need to be able to edit our
-notes.  The first step toward this is to make our button toggle between `edit`
-and `save` modes.
+"Dummy text" isn't going to carry use far.  We need to be able to edit our notes.  The first step toward this is to make our button toggle between `edit` and `save` modes.
 
-To do this, we store some temporary state.  We create a tiddler in the
-`$:/temp/supp-info/notes` namespace to hold our state, and give it the field
-`mode`, which will hold either `edit` or `save`.
+To do this, we store some temporary state.  We create a tiddler in the `$:/temp/supp-info/notes` namespace to hold our state, and give it the field `mode`, which will hold either `edit` or `save`.
 
 ### View template - buttons ###
 
@@ -947,8 +773,7 @@ To do this, we store some temporary state.  We create a tiddler in the
 
 #### Analysis ####
 
-We start with two new procedures, `edit-note` and `save-note`, which toggle the
-`mode` field on our temporary tiddler between "save" and "edit"
+We start with two new procedures, `edit-note` and `save-note`, which toggle the `mode` field on our temporary tiddler between "save" and "edit"
 
 For now, that's all they do.  We will add to them in later steps.
 
@@ -977,9 +802,7 @@ For now, that's all they do.  We will add to them in later steps.
 
 #### Analysis ####
 
-We retrieve the `mode` field from our temporary tiddler and store it in the
-`mode` variable.  There may be a more clever way to do this in one filter than
-our version here:
+We retrieve the `mode` field from our temporary tiddler and store it in the `mode` variable.  There may be a more clever way to do this in one filter than our version here:
 
 ```
         <$let
@@ -990,10 +813,7 @@ our version here:
 
 but this works and we won't spend any time trying to replace it.
 
-Our `delete` button doesn't need to change, nor does the `note` itself, but we
-now replace the `edit` button with an `<% if %>...<% endif %>` block that uses
-this `mode` variable to decide which button to show, and which procedure to
-invoke when the button is clicked.
+Our `delete` button doesn't need to change, nor does the `note` itself, but we now replace the `edit` button with an `<% if %>...<% endif %>` block that uses this `mode` variable to decide which button to show, and which procedure to invoke when the button is clicked.
 
 
 Step 7 - Make edit and save work
@@ -1008,9 +828,7 @@ We can download this and drag the resulting file to our test wiki:
 
 > [SuppNotes_Step7.json][st7]
 
-We can simply accept the overlaying of the earlier code.  ***But if we are
-starting from a fresh copy of TiddlyWiki**, we will need to save and reload
-our sample wiki to see everything function as expected.*
+We can simply accept the overlaying of the earlier code.  ***But if we are starting from a fresh copy of TiddlyWiki**, we will need to save and reload our sample wiki to see everything function as expected.*
 
 
 ### Screenshots ###
@@ -1043,14 +861,7 @@ Explanation
 
 ### Sidebar Tab ###
 
-While we're going to focus on editing and saving our note, we first introduce a
-minor debugging helper.  As we shift around from our ViewTemplate to the
-`HelloThere` and other tiddlers to our temporary files, we will find that
-there's a lot of scrolling or searching.  It's useful to have readily available
-links for these.  We do this by introducing a sidebar tab that simply collects
-links to various useful tiddlers.  Then we mostly keep this tab selected.  When
-the coding is done, we will remove this tab.  (If we think we are going to come
-back to this, we might simply remove it from the sidebar instead.)
+While we're going to focus on editing and saving our note, we first introduce a minor debugging helper.  As we shift around from our ViewTemplate to the `HelloThere` and other tiddlers to our temporary files, we will find that there's a lot of scrolling or searching.  It's useful to have readily available links for these.  We do this by introducing a sidebar tab that simply collects links to various useful tiddlers.  Then we mostly keep this tab selected.  When the coding is done, we will remove this tab.  (If we think we are going to come back to this, we might simply remove it from the sidebar instead.)
 
 ![Screenshot 7e](Screenshot7e.png)
 
@@ -1080,30 +891,24 @@ caption: Supp
 We simply have a few lists of links, separated by horizontal rules.
 
   * The code we're using to implement our features, distinguished by a prefix
-  * Two tiddlers from tiddlywiki.com for which have some associated Notes, and
-    one that doesn't
+  * Two tiddlers from tiddlywiki.com for which have some associated Notes, and one that doesn't
   * A list of the current temporarty tiddlers in our namespace
-  * The `$:/AdvancedSearch` tiddler, which is useful as we work out our code to
-    test various filters.  (Yes, this is available next to the search box, but
-    it really is convenient to have it here when we're scanning for the next
-    tiddler we want to open.)
+  * The `$:/AdvancedSearch` tiddler, which is useful as we work out our code to test various filters.  (Yes, this is available next to the search box, but it really is convenient to have it here when we're scanning for the next tiddler we want to open.)
 
-Since this is throw-away code, we don't want to spend too much effort on it, but
-the `<<list-links>>` macro is extremely simple.
+Since this is throw-away code, we don't want to spend too much effort on it, but the `<<list-links>>` macro is extremely simple.
 
 We also give `caption` fields to the custom tiddlers included in the sidebar to make them easier to distinguish.
+
+#### Keeping query for `$:/AdvancedSearch` ###
+ 
+Also in this step, we add a `query` field to the view template.  It's attached to that specific one because that one seems to be our main working tiddler, but it could be anywhere, including in its own standalone tiddler.  This simply contains `[prefix[$:/supp-info]]`.  The idea is to select exactly the tiddlers that make up our current work.  At any time, we can paste this text into the `$:/AdvancedSearch` `filter` tab, click the Export button and choose JSON to download a JSON bundle of what we're working on.  This makes it easy to keep many versions of our working code, even if we don't have `git` knowledge.
 
 
 ### Separate CSS ###
 
- There are Tiddlywikians who prefer to work as much as possible in single files,
- distributing procedures, markup, styling, and everything else in one place.
- Here we go a different route.  While we often start in a single file for
- convenience, we separate our different content into separate tiddlers.
+There are Tiddlywikians who prefer to work as much as possible in single files, distributing procedures, markup, styling, and everything else in one place. Here we go a different route.  While we often start in a single file for convenience, we separate our different content into separate tiddlers.
 
- The styles are an easy first step: we create the file
- `$:/supp-info/notes/styles/main`, and move the content of our `<style>` element
- into this file
+The styles are an easy first step: we create the file `$:/supp-info/notes/styles/main`, and move the content of our `<style>` element  into this file
 
  #### Code ####
 
@@ -1143,28 +948,14 @@ We also give `caption` fields to the custom tiddlers included in the sidebar to 
 ```
 
 #### Analysis ####
+ 
+There is an additional reason besides cleanliness and organization for this move.  When we use a style element in our tiddler and open the tiddler, the rules it generates are added to the global set of CSS rules.  This is very useful if our styles are dynamically generated: they will be in effect only when the containing tiddler is rendered.  But our rules will be static.
 
-There is an additional reason besides cleanliness and organization for this
-move.  When we use a style element in our tiddler and open the tiddler, the
-rules it generates are added to the global set of CSS rules.  This is very
-useful if our styles are dynamically generated: they will be in effect only when
-the containing tiddler is rendered.  But our rules will be static.
+This happens for every tiddler we have open.  At the moment, we are focused on only a few tiddlers, but eventually, we want our mechanism to apply to *all* tiddlers (or all non-system ones.)  That means we are adding the same CSS rules to some internal browser store over and over.  Nothing will change in rendering because the rules are simply repeated, but its a clear waste of memory.  Although no one has mentioned significant issues because of this, it seems silly to take such a risk, when it offers no benefit.
 
-This happens for every tiddler we have open.  At the moment, we are focused on
-only a few tiddlers, but eventually, we want our mechanism to apply to *all*
-tiddlers (or all non-system ones.)  That means we are adding the same CSS rules
-to some internal browser store over and over.  Nothing will change in rendering
-because the rules are simply repeated, but its a clear waste of memory.
-Although no one has mentioned significant issues because of this, it seems silly
-to take such a risk, when it offers no benefit.
+(If anyone reading can suggest a reason for why this is not so, please share it!)
 
-(If anyone reading can suggest a reason for why this is not so, please share
-it!)
-
-With this change, our main view template tiddler is simpler.  At the end, we
-might choose to separate out the procedures into their own tiddler as well, but
-they won't ever be used elsewhere, and its unclear if the same rationale as
-above about wasted memory also applies.
+With this change, our main view template tiddler is simpler.  At the end, we might choose to separate out the procedures into their own tiddler as well, but they won't ever be used elsewhere, and its unclear if the same rationale as above about wasted memory also applies.
 
 
 ### Updated procedures ###
@@ -1197,37 +988,13 @@ We now handle editing and saving our note.
 
 #### Analysis ####
 
-Many edit fields in Tiddlywiki alter their data in real-time.  When a user
-checks a [CheckboxWidget][cw], the related data is, by default, immediately
-updated in the tiddler store.  There are plenty of exceptions to this, including
-the main tiddler editing mechanism, where a second `draft.of` tiddler is
-created, and the edits are made against that.  When the this is saved, it
-replaces the entire tiddler with what's in the draft.  But there is also an exit
-mechanism to discard the draft and return to the original tiddler.  This can be
-thought of a safety feature, so that accidental bad edits are reversible.
+Many edit fields in Tiddlywiki alter their data in real-time.  When a user checks a [CheckboxWidget][cw], the related data is, by default, immediately updated in the tiddler store.  There are plenty of exceptions to this, including the main tiddler editing mechanism, where a second `draft.of` tiddler is created, and the edits are made against that.  When the this is saved, it replaces the entire tiddler with what's in the draft.  But there is also an exit mechanism to discard the draft and return to the original tiddler.  This can be thought of a safety feature, so that accidental bad edits are reversible.
 
-We'd like to emulate that safety feature here.  We do this by using our
-temporary tiddler to store the current edited verson.  When we click `edit`, we
-copy the code from our JSON data store into the temporary field.  When we then
-click `save` we update the JSON data using the text in that tiddler.  We might
-recall that we're already using the `mode` field of this tiddler.  Here we'll
-use the `text` field.
+We'd like to emulate that safety feature here.  We do this by using our temporary tiddler to store the current edited verson.  When we click `edit`, we copy the code from our JSON data store into the temporary field.  When we then click `save` we update the JSON data using the text in that tiddler.  We might recall that we're already using the `mode` field of this tiddler.  Here we'll use the `text` field.
 
-<del>~~Later on, we'll come back and add a companion `exit` button to quit
-without saving.~~</del> <ins>**Note from the future**: we never actually get
-around to this; it ends up a TODO-item, or an excercise for the reader.</ins>
+<del>~~Later on, we'll come back and add a companion `exit` button to quit without saving.~~</del> <ins>**Note from the future**: we never actually get around to this; it ends up a TODO-item, or an excercise for the reader.</ins>
 
-To better note what's happening, it's instructive to do a little test.  We can
-create a new Note on, say, the `HelloThere` tiddler.  We should see a new temp
-tiddler in the sidebar, something like `$:/temp/supp-info/notes/HelloThere/3`
-(We should note that the `3` at the end may vary depending upon how many Notes
-we currently have; we should also recall that the 0-based indexing in JSON means
-that `3` represents the *fourth* entry.)  If we open that tiddler in edit mode,
-replace the text "Dummy text" with something else, and save, we will see the
-Note in `HelloThere` has also been edited.  In edit mode on our note, we are
-directly editing the temporary tiddler.  Only when we hit `save` do we update
-the JSON.  This is important, becase updating JSON is a relatively expensive
-operation.  We don't want to be doing this on every keystroke.
+To better note what's happening, it's instructive to do a little test.  We can create a new Note on, say, the `HelloThere` tiddler.  We should see a new temp tiddler in the sidebar, something like `$:/temp/supp-info/notes/HelloThere/3` (We should note that the `3` at the end may vary depending upon how many Notes we currently have; we should also recall that the 0-based indexing in JSON means that `3` represents the *fourth* entry.)  If we open that tiddler in edit mode, replace the text "Dummy text" with something else, and save, we will see the Note in `HelloThere` has also been edited.  In edit mode on our note, we are directly editing the temporary tiddler.  Only when we hit `save` do we update the JSON.  This is important, becase updating JSON is a relatively expensive operation.  We don't want to be doing this on every keystroke.
 
 
 Step 8 - Make notes open in edit mode when added
@@ -1242,9 +1009,7 @@ We can download this and drag the resulting file to our test wiki:
 
 > [SuppNotes_Step8.json][st8]
 
-We can simply accept the overlaying of the earlier code.  ***But if we are
-starting from a fresh copy of TiddlyWiki**, we will need to save and reload
-our sample wiki to see everything function as expected.*
+We can simply accept the overlaying of the earlier code.  ***But if we are starting from a fresh copy of TiddlyWiki**, we will need to save and reload our sample wiki to see everything function as expected.*
 
 
 ### Screenshots ###
@@ -1267,18 +1032,9 @@ our sample wiki to see everything function as expected.*
 Explanation
 -----------
 
-We want newly created notes to open in edit mode.  It only makes sense.  When
-we're creating a note, it's surely in order to add  or modify its content.  We
-don't need to see it as a blank note or with our (temporary, really!) "Dummy
-text" content.  So we want it opened for edit.
-
-But there's a bit of a problem.  We are displaying the notes in a `<details>`
-widget.  If that's closed, we would want to open it to display our new Note.
-However, TiddlyWiki doesn't give us a very useful way to open a closed
-`<details>` widget.  There are techniques for this, but they are often obscure
-or convoluted.  It might well be simpler to replace the `<details>` widget with
-a `<$reveal>` one.  We discussed this possibility back in step 2, and now it's
-time to go ahead.
+We want newly created notes to open in edit mode.  It only makes sense.  When we're creating a note, it's surely in order to add  or modify its content.  We don't need to see it as a blank note or with our (temporary, really!) "Dummy text" content.  So we want it opened for edit.
+ 
+But there's a bit of a problem.  We are displaying the notes in a `<details>` widget.  If that's closed, we would want to open it to display our new Note. However, TiddlyWiki doesn't give us a very useful way to open a closed `<details>` widget.  There are techniques for this, but they are often obscure or convoluted.  It might well be simpler to replace the `<details>` widget with a `<$reveal>` one.  We discussed this possibility back in step 2, and now it's time to go ahead.
 
 ### View Template ###
 
@@ -1658,13 +1414,9 @@ Explanation
 
 ### Stylesheet ###
 
-We promised early on to introduce a less jarring color scheme for our Notes.  We
-do so here.
+We promised early on to introduce a less jarring color scheme for our Notes.  We do so here.
 
-First off, we need to change from `type: text/css` to `type:
-text/vnd.tiddlywiki` (which is the default value, so we can just remove the
-`type` content instead.)  This is because our stylesheet will now be dynamic,
-using calls to the `<<colour>>` macro.  `text/css` is only for static sheets.
+First off, we need to change from `type: text/css` to `type: text/vnd.tiddlywiki` (which is the default value, so we can just remove the `type` content instead.)  This is because our stylesheet will now be dynamic, using calls to the `<<colour>>` macro.  `text/css` is only for static sheets.
 
 Then we simply need to use some palette entries for our key colors:
 
@@ -1685,14 +1437,9 @@ Here we focus only on the changes made to use the current palette:
 
 #### Analysis ####
 
-We choose the `message-background` and `message-foreground` for their fit with
-the main content, for their relatively subtle difference from the main tiddler
-background, and for their clear contrast from one another.
-
-**Note** There was a bug in this that was left in the initial build of the
-system.  As our author was writing up these notes, he realized there was a
-simple fix and applied it.  If we see notes about problems in some palettes,
-it's due to this.
+We choose the `message-background` and `message-foreground` for their fit with the main content, for their relatively subtle difference from the main tiddler background, and for their clear contrast from one another.
+ 
+**Note** There was a bug in this that was left in the initial build of the system.  As our author was writing up these notes, he realized there was a simple fix and applied it.  If we see notes about problems in some palettes, it's due to this.
 
 
 Step 12 - Your turn
@@ -1707,32 +1454,24 @@ These are the to-do items we've collected along the way, in no particular order
   * Add a cancel-edit button as well as save
   * Sorting of notes (drag and drop?)
   * Add focus to newly added note textarea
-  * Fix ridiculous `[add[1]subtract[1]]` hack in setting the temp index on a
-    newly minted group
+  * Fix ridiculous `[add[1]subtract[1]]` hack in setting the temp index on a newly minted group
   * Separate the procedures into their own tiddler(s)
-  * Rename temp tiddlers when renaming content key (keep open/edit statuses when
-    tiddler is renamed)
-  * Possibly: hide the notes section entirely unless the tiddler is
-    hovered/pressed?
+  * Rename temp tiddlers when renaming content key (keep open/edit statuses when tiddler is renamed)
+  * Possibly: hide the notes section entirely unless the tiddler is hovered pressed?
   * Make the `currentTiddler` a passed parameter everywhere rather than a global
-  * Allow note opt-out mechanism for specific tiddlers.  For consistency, this
-    should be external, not a field.
+  * Allow note opt-out mechanism for specific tiddlers.  For consistency, this should be external, not a field.
   * Remove (or hide) the sidebar.
-  * Fixing the missing case in the `jsondelete` code - when node is neither an
-    array nor a plain object
+  * Fixing the missing case in the `jsondelete` code - when node is neither an array nor a plain object
   * Make our `format:json` calls consistent.  We use both `[2]` and `[4]`
 
 Here we accept user input.  Anyone who would like to fix one of these is more than welcome.  Please post a comment here with some sort of description of your fix and ideally a JSON file similar to the ones above.
-
+ 
 If the code uses the naming convention establbished here, then by pasting the `query` field from the View Template tiddler into the `$:/AdvancedSearch` `filter` tab, we can choose the `Export` button and then `JSON` to get our file.
 
 
 Conclusion
 ==========
-
-Writing up this documentation took probably ten times as long as writing the
-module itself.  I'd love to know if it is worth it to readers.  Is this style of
-documetation helpful?  I might soon write a companion that describes how the final code works without describing the building process.  That I know is helpful to some users.  but is this step-by-step instruction also useful?
+ Writing up this documentation took probably ten times as long as writing the module itself.  I'd love to know if it is worth it to readers.  Is this style of documetation helpful?  I might soon write a companion that describes how the final code works without describing the building process.  That I know is helpful to some users.  but is this step-by-step instruction also useful?
 
 And for anyone who's followed me through over 9000 words, thank you very much for joining me on this journey!
 
@@ -1752,6 +1491,7 @@ And for anyone who's followed me through over 9000 words, thank you very much fo
   [eu]: https://talk.tiddlywiki.org/t/14468
   [f2]: https://github.com/CrossEye/TW5-SuppNotesDemo/commit/70161e4#diff-cee44b2fba400d4d2bd6e8445f79395f067abf8ead628e391cf034cdd1968a76
   [f4]: https://github.com/CrossEye/TW5-SuppNotesDemo/commit/70161e4#diff-1fa4c91a6b7aa3b0ddab5131f1d46ba02c48b339df37a024feefbcddae8026aa
+  [gr]: https://github.com/CrossEye/TW5-SuppNotesDemo
   [gw]: https://talk.tiddlywiki.org/t/14301/6
   [hm]: https://tiddlywiki.com/dev/#HookMechanism:%5Bprefix%5BHook:%5D%5D
   [jd]: https://github.com/TiddlyWiki/TiddlyWiki5/pull/9390
