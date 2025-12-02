@@ -22,7 +22,7 @@ But here too, the process of building and the techniques used are the most
 important part of this discussion.  The end product is... fine, but not very
 exciting.  I'm not going to do any comparisons of the two outcomes.  The only
 differences I know of are that mine handles multiple notes per tiddler, and that
-I have a solution of sorts for the rename conundrum he mentions:
+I have a solution of sorts for the *rename* conundrum he mentions:
 
 [quote="TW_Tones, post:1, topic:14422"]
 Warning if the tiddler is renamed you will no longer see the notes for it. Do
@@ -35,6 +35,26 @@ demonstration of the style of documentation I prefer.  In this case, I'm
 documenting the series of steps I might take to build something like this.  I
 might later do a second pass that only explains the completed solution.
 
+
+Contents
+--------
+
+  * Intro (you are here)
+  * What We're Building
+  * Following Along
+  * Step 1 - Show footer with note-count
+  * Step 2 - Styled, expandable section
+  * Step 3 - Display note content
+  * Step 4 - Make `add` button functional
+  * Step 5 - Adding controls for individual Notes
+  * Step 6 - Edit and save modes
+  * Step 7 - Make edit and save work
+  * Step 8 - Make notes open in edit mode when added
+  * Step 9 - Handle all tiddlers, not just preconfigured ones
+  * Step 10 - Handle tiddler renaming
+  * Step 11 - Use palette colors
+  * Step 12 - Your turn
+  * Conclusion
 
 
 
@@ -417,7 +437,7 @@ Tricks][ct], but there are many other good sites.  So here, we will only discuss
 But first, we should note one CSS feature that's now [become
 ubiquitous][cnu] across all major devices/browsers, [CSS Nesting][cn].  Instead
 of writing (in an entirely made-up example -- don't blame me if it hurts your
-eyes, ok?)
+eyes, ok?) this:
 
 ```css
 div.my-class {border: 1px solid red;}
@@ -571,7 +591,7 @@ time, we actually show them.
       </$list>
 ```
 
-We use a [`<$List>` widget][lw] to iterated the indices, and a new usage of
+We use a [`<$List>` widget][lw] to iterate the indices, and a new usage of
 [`jsonget`][jg] we haven't seen so far:
 `[{$:/supp-info/notes/content}jsonget<currentTiddler>,<index>]`.  Here we have
 two parameters, `<currentTiddler>` and `<index>`.  The current tiddler is the
@@ -599,10 +619,10 @@ I can."`
 
 To display this note, we use the [`WikifyWidget`][ww], which takes the text we
 just found, and, treating it as wikitext, converts it into a format useful for
-displaying (we use the `output` parameter to choose the format `"html"`),
-storing the results in the variable `note`.  Then in the content of the widget,
-we include the reference `<<note>>` to put that out to the user.  That this is
-now treating the content as wikitext explains the reason we've updated `Quick
+displaying, storing the results in the variable `note`.  We use the `output`
+parameter to choose the format `"html"`. Then in the content of the widget, we
+include the reference `<<note>>` to put that out to the user.  That this is now
+treating the content as wikitext explains the reason we've updated `Quick
 Start/0`: we want to test some actual wikitext and not just plain test.
 Theoretically, seeing that blank lines are respected would be enough, but
 something like links feels like a more substantial test.
@@ -693,9 +713,9 @@ We can download this and drag the resulting file to our test wiki:
 
 > [SuppNotes_Step5.json][st5]
 
-We can simply accept the overlaying of the earlier code.  ***But there is a new
-tiddler included**, and that one is a JS module, so we will need to save and
-reload our sample wiki to see these changes.*
+We can simply accept the overlaying of the earlier code.  ***<ins>But there is a
+new tiddler included</ins>**, and that one is a JS module, so we will need to
+save and reload our sample wiki to see these changes.*
 
 
 ### Screenshots ###
@@ -764,7 +784,7 @@ const deepDelete = ([first, ...rest] = []) => (obj,
 
 #### Analysis ####
 
-This has the public expoorted function `jsondelete`, which is a Tiddlywiki
+This has the public exported function `jsondelete`, which is a Tiddlywiki
 wrapper around the function `deepDelete`.  This function is written in a very
 different style than most TW code, using nested conditional operations and
 expressions instead of statements.  The basic idea is that we accept an array of
@@ -1057,11 +1077,11 @@ caption: Supp
 
 #### Analysis ####
 
-We simply have a few lists of links, separateed by horizontal rules.
+We simply have a few lists of links, separated by horizontal rules.
 
   * The code we're using to implement our features, distinguished by a prefix
-  * Two select tiddlers from tiddlywiki.com for which have some associated
-    Notes, and one that doesn't
+  * Two tiddlers from tiddlywiki.com for which have some associated Notes, and
+    one that doesn't
   * A list of the current temporarty tiddlers in our namespace
   * The `$:/AdvancedSearch` tiddler, which is useful as we work out our code to
     test various filters.  (Yes, this is available next to the search box, but
@@ -1137,6 +1157,9 @@ to some internal browser store over and over.  Nothing will change in rendering
 because the rules are simply repeated, but its a clear waste of memory.
 Although no one has mentioned significant issues because of this, it seems silly
 to take such a risk, when it offers no benefit.
+
+(If anyone reading can suggest a reason for why this is not so, please share
+it!)
 
 With this change, our main view template tiddler is simpler.  At the end, we
 might choose to separate out the procedures into their own tiddler as well, but
@@ -1302,7 +1325,7 @@ But we also need to update our add-note action, to ensure both that our addition
 
 We set two fields, the `state` field we just discussed above in the tiddler's temp partner, setting it to `show`, and the `mode` field in the temp tiddler for the specific note, setting it to `edit`.
 
-**Note** that there are [additional changes][ac] in this section that were intenced to set the focus on the the newly added note.  We can at some point come back to try to fix this, as it would be useful to have.  Or someone who understands TiddlyWiki's focus mechanism might chime in and explain what's wrong with this code.
+**Note** that there are [additional changes][ac] in this section that were intended to set the focus on the the newly added note.  We can at some point come back to try to fix this, as it would be useful to have.  Or someone who understands TiddlyWiki's focus mechanism might chime in and explain what's wrong with this code.
 
 
 Step 9 - Handle all tiddlers, not just preconfigured ones
@@ -1415,9 +1438,9 @@ We can download this and drag the resulting file to our test wiki:
 
 > [SuppNotes_Step10.json][st10]
 
-We can simply accept the overlaying of the earlier code.   ***But there is a new
-tiddler included**, and that one is a JS module, so we will need to save and
-reload our sample wiki to see these changes.*
+We can simply accept the overlaying of the earlier code.   ***<ins>But there is
+a new tiddler included</ins>**, and that one is a JS module, so we will need to
+save and reload our sample wiki to see these changes.*
 
 
 ### Screenshots ###
@@ -1442,19 +1465,21 @@ Explanation
 
 ### Rename module ###
 
-There is an outstanding problem without an obvious solution.  Our notes are
-indexed by their *titles*.  That's fine, as titles are unique across a wiki.
-But we are allowed to *rename* them.  What happens then?  As of now, they are
+There is an outstanding problem without an obvious solution.  Our Notes are
+indexed by their *titles*.  That's fine, as titles are unique across a wiki. But
+we are allowed to *rename* them.  What happens then?  As of now, these Notes are
 simply orphaned.  If we change "Quick Start" to "Rapid Start", our tiddler will
 lose connection to the note(s) we've created for it.  And if later, if we create
-a new tiddler with the title "Quick Start", it will inherit the notes we meant
+a new tiddler with the title "Quick Start", it will inherit the Notes we meant
 for the older one.
 
 There is no obvious wikitext solution to this.  And the somewhat obvious
-JavaScript solutions [also didn't work][rt].  But that discussion lead to one
-JavaScript alternative.  It involves a JS module
+JavaScript solutions [also didn't work][rt].  But that discussion lead to a
+working JavaScript alternative.  It involves a JS module
 (`$:/supp-info/notes/modules/startup/rename`) with `module-type` of `startup`,
-and it uses the [hooks mechanism][hm] to connect everything together:
+and it uses the [hooks mechanism][hm] to connect everything together.
+
+As suggested in Step 5, there are likely readers entirely uninterested in the inner workings of a JavaScript module.  It's fine to skip this, and we'll see you in the `View Template` section below.
 
 
 #### Code ####
@@ -1533,8 +1558,8 @@ input except that the key has been replaced.  It does this by
 Again changing the `exports` object, we create a function to run on startup, and
 in that we associate a new function with the [`tm-saving-tiddler` hook][st].
 This means our function will run whenever that hook is invoked, which includes
-when the user edits a tiddler and saves.  It passes both the old tiddler and the
-new tiddler with all its changes.
+when the user edits a tiddler and saves.  The hook passes to our function both
+the old tiddler and the new tiddler with all its changes.
 
 We now check to see if the new tiddler title is different from the old one with
 a conditional that looks like this:
@@ -1555,7 +1580,8 @@ returning `undefined` at the end in that case.  You can read more in MDN's
 We check if the new tiddler's `title` field is equal to the old tiddler's
 `draft.title`, if they have the same `created` fields, and if the new tiddler's
 `title` is different than the old one's `draft.of`.  If all these are true, then
-we're in a renaming scenario.  Here we
+we're in a renaming scenario.  (*For any TiddlyWiki experts, are these
+conditions both necessary and sufficient to identify a renaming?*)  Here we
 
   1. extract the JSON contents from its tiddler
   2. use `JSON.parse` to turn that into an object
@@ -1584,6 +1610,8 @@ lost.  This should be relatively easy to fix. (<small><ins>TODO</ins></small>)
 
 
 ### View Template ###
+
+To those, who skipped the JavaScript explanation, welcome back!
 
 We make two minor edits to the View Template:
 
@@ -1657,16 +1685,56 @@ Here we focus only on the changes made to use the current palette:
 
 #### Analysis ####
 
-We choose the `message-background` and `message-foreground` for their fit with the main content, for their relatively subtle difference from the main tiddler background, and for their clear contrast from one another.
+We choose the `message-background` and `message-foreground` for their fit with
+the main content, for their relatively subtle difference from the main tiddler
+background, and for their clear contrast from one another.
 
-**Note** There was a bug in this that was left in the initial build of the system.  As our author was writing up his notes, he realized there was a simple fix and applied it.  If we see notes about problems in some palettes, it's due to this.
+**Note** There was a bug in this that was left in the initial build of the
+system.  As our author was writing up these notes, he realized there was a
+simple fix and applied it.  If we see notes about problems in some palettes,
+it's due to this.
 
 
-Still to do
-===========
+Step 12 - Your turn
+===================
 
-TODO: write this section!  :smile:
+We're calling this "done enough" here.  The system still has some flaws, and it's now the readers' turn to try to correct them.
 
+### TODO List ###
+
+These are the to-do items we've collected along the way, in no particular order
+
+  * Add a cancel-edit button as well as save
+  * Sorting of notes (drag and drop?)
+  * Add focus to newly added note textarea
+  * Fix ridiculous `[add[1]subtract[1]]` hack in setting the temp index on a
+    newly minted group
+  * Separate the procedures into their own tiddler(s)
+  * Rename temp tiddlers when renaming content key (keep open/edit statuses when
+    tiddler is renamed)
+  * Possibly: hide the notes section entirely unless the tiddler is
+    hovered/pressed?
+  * Make the `currentTiddler` a passed parameter everywhere rather than a global
+  * Allow note opt-out mechanism for specific tiddlers.  For consistency, this
+    should be external, not a field.
+  * Remove (or hide) the sidebar.
+  * Fixing the missing case in the `jsondelete` code - when node is neither an
+    array nor a plain object
+  * Make our `format:json` calls consistent.  We use both `[2]` and `[4]`
+
+Here we accept user input.  Anyone who would like to fix one of these is more than welcome.  Please post a comment here with some sort of description of your fix and ideally a JSON file similar to the ones above.
+
+If the code uses the naming convention establbished here, then by pasting the `query` field from the View Template tiddler into the `$:/AdvancedSearch` `filter` tab, we can choose the `Export` button and then `JSON` to get our file.
+
+
+Conclusion
+==========
+
+Writing up this documentation took probably ten times as long as writing the
+module itself.  I'd love to know if it is worth it to readers.  Is this style of
+documetation helpful?  I might soon write a companion that describes how the final code works without describing the building process.  That I know is helpful to some users.  but is this step-by-step instruction also useful?
+
+And for anyone who's followed me through over 9000 words, thank you very much for joining me on this journey!
 
 
   [ac]: https://github.com/CrossEye/TW5-SuppNotesDemo/compare/d1d20d7..70161e4#diff-1fa4c91a6b7aa3b0ddab5131f1d46ba02c48b339df37a024feefbcddae8026aaL9-R20
